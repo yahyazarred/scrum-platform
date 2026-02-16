@@ -21,7 +21,13 @@ export const signup = async (data: {
     body: JSON.stringify(data),
   });
 
-  return res.json();
+  const json = await res.json();
+  
+  if (!res.ok) {
+    throw new Error(json.message || 'Signup failed');
+  }
+
+  return json;
 };
 
 export const verifyEmail = async (data: {
@@ -34,7 +40,13 @@ export const verifyEmail = async (data: {
     body: JSON.stringify(data),
   });
 
-  return res.json();
+  const json = await res.json();
+  
+  if (!res.ok) {
+    throw new Error(json.message || 'Verification failed');
+  }
+
+  return json;
 };
 
 export const login = async (data: {
@@ -47,15 +59,27 @@ export const login = async (data: {
     body: JSON.stringify(data),
   });
 
-  return res.json();
+  const json = await res.json();
+  
+  if (!res.ok) {
+    throw new Error(json.message || 'Login failed');
+  }
+
+  return json;
 };
 
 export const getMe = async (token: string) => {
-  const res = await fetch("http://localhost:5000/api/user/me", {
+  const res = await fetch(`${API_URL}/user/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  return res.json();
+  const json = await res.json();
+  
+  if (!res.ok) {
+    throw new Error(json.message || 'Failed to fetch user data');
+  }
+
+  return json;
 };

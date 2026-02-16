@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGooglePlusG, faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { signup, login } from '../services/api';
-import './auth.css';
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGooglePlusG,
+  faFacebookF,
+  faGithub,
+  faLinkedinIn,
+} from "@fortawesome/free-brands-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { signup, login } from "../services/api";
+import "./auth.css";
 
+// ================== Interfaces ==================
 interface SignupForm {
   firstName: string;
   lastName: string;
@@ -12,85 +18,128 @@ interface SignupForm {
   email: string;
   password: string;
 }
-
 interface LoginForm {
   email: string;
   password: string;
 }
 
+// ================== Main Component ==================
+
 const Auth: React.FC = () => {
   const navigate = useNavigate();
+  // false = show login
+  // true = show signup
   const [isActive, setIsActive] = useState<boolean>(false);
 
-  // Sign up form state
+  // ================== State: Signup Form ==================
+
+  //store all signup form inputs in one object
   const [signupForm, setSignupForm] = useState<SignupForm>({
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
-    email: '',
-    password: '',
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    email: "",
+    password: "",
   });
 
-  // Login form state
+  // ================== State: Login Form ==================
+
+  //store login form inputs
   const [loginForm, setLoginForm] = useState<LoginForm>({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
+  // ================== Toggle Functions ==================
+
+  // Switch UI to SIGNUP mode
   const handleRegisterClick = () => {
     setIsActive(true);
   };
 
+  // Switch UI to LOGIN mode
   const handleLoginClick = () => {
     setIsActive(false);
   };
 
-  // Handle signup form changes
+  // ================== Input Handlers ==================
+
+  // When user types in signup inputs
+  // It updates the correct field dynamically
   const handleSignupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSignupForm({ ...signupForm, [e.target.name]: e.target.value });
+    setSignupForm({
+      ...signupForm, // keep existing values
+      [e.target.name]: e.target.value, // update the field that changed
+    });
   };
 
-  // Handle login form changes
+  // Same logic but for login inputs
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
+    setLoginForm({
+      ...loginForm,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  // Handle sign up submission
+  // ================== Submit: Signup ==================
+
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
+      // Send form data to backend
       const res = await signup(signupForm);
+
+      // Show backend response message
       alert(res.message);
-      navigate('/verify', { state: { email: signupForm.email } });
+
+      // Redirect user to verify page
+      navigate("/verify", { state: { email: signupForm.email } });
     } catch (error) {
-      console.error('Signup error:', error);
-      alert('An error occurred during signup. Please try again.');
+      console.error("Signup error:", error);
+      alert("An error occurred during signup. Please try again.");
     }
   };
 
-  // Handle sign in submission
+  // ================== Submit: Login ==================
+
   const handleSignInSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       const res = await login(loginForm);
-      
-      if (res.token) {
-        localStorage.setItem('token', res.token);
-        navigate('/dashboard');
-      } else {
-        alert(res.message);
-      }
+
+      // Save token and user data in localStorage
+      localStorage.setItem("token", res.token!);
+      localStorage.setItem("userStatus", res.status!);
+      localStorage.setItem("userName", `${res.firstName} ${res.lastName}`);
+
+      console.log("Token:", res.token);
+
+      // Show success message
+      alert(res.message || "Login successful!");
+
+      // Redirect to dashboard
+      navigate("/dashboard");
     } catch (error) {
-      console.error('Login error:', error);
-      alert('An error occurred during login. Please try again.');
+      console.error("Login error:", error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during login. Please try again.",
+      );
     }
   };
 
   return (
-    <div className={`container ${isActive ? 'active' : ''}`} id="container">
+    // container class changes when isActive changes
+    <div className={`container ${isActive ? "active" : ""}`} id="container">
+      {/* ================= SIGN UP PANEL ================= */}
       <div className="form-container sign-up">
         <form onSubmit={handleSignUpSubmit}>
           <h1>Create Account</h1>
+
+          {/* Social icons section */}
           <div className="social-icons">
             <a href="#" className="icon">
               <FontAwesomeIcon icon={faGooglePlusG} />
@@ -105,53 +154,72 @@ const Auth: React.FC = () => {
               <FontAwesomeIcon icon={faLinkedinIn} />
             </a>
           </div>
+
           <span>or use your email for registration</span>
-          <input 
-            type="text" 
-            name="firstName"
-            placeholder="First Name" 
-            value={signupForm.firstName}
-            onChange={handleSignupChange}
-            required
-          />
-          <input 
-            type="text" 
-            name="lastName"
-            placeholder="Last Name" 
-            value={signupForm.lastName}
-            onChange={handleSignupChange}
-            required
-          />
-          <input 
+
+          <div className="name-container">
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              value={signupForm.firstName}
+              onChange={handleSignupChange}
+              required
+            />
+
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              value={signupForm.lastName}
+              onChange={handleSignupChange}
+              required
+            />
+          </div>
+          <input
             type="date"
             name="dateOfBirth"
             value={signupForm.dateOfBirth}
             onChange={handleSignupChange}
             required
+            max={
+              new Date(
+                new Date().getFullYear() - 15,
+                new Date().getMonth(),
+                new Date().getDate(),
+              )
+                .toISOString()
+                .split("T")[0]
+            }
           />
-          <input 
-            type="email" 
+
+          <input
+            type="email"
             name="email"
-            placeholder="Email" 
+            placeholder="Email"
             value={signupForm.email}
             onChange={handleSignupChange}
             required
           />
-          <input 
-            type="password" 
+
+          <input
+            type="password"
             name="password"
-            placeholder="Password" 
+            placeholder="Password"
             value={signupForm.password}
             onChange={handleSignupChange}
             required
           />
+
           <button type="submit">Sign Up</button>
         </form>
       </div>
 
+      {/* ================= LOGIN PANEL ================= */}
       <div className="form-container sign-in">
         <form onSubmit={handleSignInSubmit}>
-          <h1>Sign In</h1>
+          <h1>Login</h1>
+
           <div className="social-icons">
             <a href="#" className="icon">
               <FontAwesomeIcon icon={faGooglePlusG} />
@@ -166,30 +234,38 @@ const Auth: React.FC = () => {
               <FontAwesomeIcon icon={faLinkedinIn} />
             </a>
           </div>
+
           <span>or use your email and password</span>
-          <input 
-            type="email" 
+
+          <input
+            type="email"
             name="email"
-            placeholder="Email" 
+            placeholder="Email"
             value={loginForm.email}
             onChange={handleLoginChange}
             required
           />
-          <input 
-            type="password" 
+
+          <input
+            type="password"
             name="password"
-            placeholder="Password" 
+            placeholder="Password"
             value={loginForm.password}
             onChange={handleLoginChange}
             required
           />
+
           <a href="#">Forget Your Password?</a>
+
           <button type="submit">Login</button>
         </form>
       </div>
 
+      {/* ================= TOGGLE SECTION ================= */}
+      {/* This is the sliding animation section */}
       <div className="toggle-container">
         <div className="toggle">
+          {/* Left panel (login view) */}
           <div className="toggle-panel toggle-left">
             <h1>Welcome Back!</h1>
             <p>Already have an account?</p>
@@ -197,10 +273,16 @@ const Auth: React.FC = () => {
               Login
             </button>
           </div>
+
+          {/* Right panel (signup view) */}
           <div className="toggle-panel toggle-right">
             <h1>Hello, Friend!</h1>
             <p>Don't have an account yet?</p>
-            <button className="hidden" onClick={handleRegisterClick} type="button">
+            <button
+              className="hidden"
+              onClick={handleRegisterClick}
+              type="button"
+            >
               Sign Up
             </button>
           </div>

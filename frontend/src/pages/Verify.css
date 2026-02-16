@@ -10,7 +10,7 @@
   border: 1px solid rgba(77, 184, 232, 0.2);
   padding: 50px 40px;
   width: 600px;
-  height: 600px;
+  height: 650px;
   text-align: center;
 }
 
@@ -43,7 +43,7 @@
 
 .verify-description {
   color: #b0c4de;
-  font-size: 14px;
+  font-size: 17px;
   line-height: 20px;
   margin-bottom: 35px;
 }
@@ -80,7 +80,7 @@
   background-color: #0f1620;
   border: 1px solid rgba(77, 184, 232, 0.3);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 22px;
   color: #ffffff;
   outline: none;
   transition: all 0.3s ease;
@@ -108,7 +108,7 @@
   padding: 12px 45px;
   background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
   color: #fff;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -134,7 +134,7 @@
 
 .verify-footer p {
   color: #8fa3c0;
-  font-size: 13px;
+  font-size: 17px;
   margin-bottom: 8px;
 }
 
