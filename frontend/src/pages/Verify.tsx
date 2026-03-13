@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { verifyEmail } from "../services/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
@@ -49,14 +50,17 @@ export default function Verify() {
 
     try {
       const res = await verifyEmail({ email, code });
-      alert(res.message);
+toast.success(res.message);
+// Save token like login does
+localStorage.setItem("token", res.token!);
+localStorage.setItem("userStatus", res.status!);
+localStorage.setItem("userName", `${res.firstName} ${res.lastName}`);
 
-      // Redirect to authentication page after success
-      navigate("/auth");
-
-    } catch (error) {
+navigate("/dashboard"); // ← go straight to dashboard
+    
+    } catch (error: any) {
       console.error('Verification error:', error);
-      alert('An error occurred during verification. Please try again.');
+      toast.error(error.message);
     }
   };
 

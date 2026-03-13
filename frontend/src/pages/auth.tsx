@@ -6,9 +6,12 @@ import {
   faGithub,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
+import { faEye, faEyeSlash, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { signup, login } from "../services/api";
 import "./auth.css";
+
 
 // ================== Interfaces ==================
 interface SignupForm {
@@ -62,6 +65,8 @@ const Auth: React.FC = () => {
     setIsActive(false);
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   // ================== Input Handlers ==================
 
   // When user types in signup inputs
@@ -83,23 +88,22 @@ const Auth: React.FC = () => {
 
   // ================== Submit: Signup ==================
 
-  const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    try {
-      // Send form data to backend
-      const res = await signup(signupForm);
+  try {
+    const res = await signup(signupForm);
 
-      // Show backend response message
-      alert(res.message);
+    toast.success(res.message);
 
-      // Redirect user to verify page
-      navigate("/verify", { state: { email: signupForm.email } });
-    } catch (error) {
-      console.error("Signup error:", error);
-      alert("An error occurred during signup. Please try again.");
-    }
-  };
+    navigate("/verify", { state: { email: signupForm.email } });
+
+  } catch (error: any) {
+    console.error("Signup error:", error);
+
+    toast.error(error.message);
+  }
+};
 
   // ================== Submit: Login ==================
 
@@ -117,13 +121,13 @@ const Auth: React.FC = () => {
       console.log("Token:", res.token);
 
       // Show success message
-      alert(res.message || "Login successful!");
+     toast.success(res.message || "Login successful!");
 
       // Redirect to dashboard
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
-      alert(
+      toast.error(
         error instanceof Error
           ? error.message
           : "An error occurred during login. Please try again.",
@@ -136,6 +140,20 @@ const Auth: React.FC = () => {
     <div className={`container ${isActive ? "active" : ""}`} id="container">
       {/* ================= SIGN UP PANEL ================= */}
       <div className="form-container sign-up">
+        <FontAwesomeIcon
+    icon={faArrowLeft}
+    className="back-icon"
+    onClick={() => navigate("/")}
+    style={{
+      cursor: "pointer",
+      fontSize: "1.5rem",
+      position: "absolute",  // <-- key change
+      top: "20px",           // distance from top
+      left: "20px",          // distance from left
+      zIndex: 10,            // ensures it’s above other elements
+    }}
+  />
+
         <form onSubmit={handleSignUpSubmit}>
           <h1>Create Account</h1>
 
@@ -202,14 +220,19 @@ const Auth: React.FC = () => {
             required
           />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={signupForm.password}
-            onChange={handleSignupChange}
-            required
-          />
+          <div className="password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={signupForm.password}
+              onChange={handleSignupChange}
+              required
+            />
+            <button type="button" onClick={() => setShowPassword(!showPassword)}>
+              <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash } />
+            </button>
+          </div>
 
           <button type="submit">Sign Up</button>
         </form>
@@ -217,6 +240,20 @@ const Auth: React.FC = () => {
 
       {/* ================= LOGIN PANEL ================= */}
       <div className="form-container sign-in">
+  <FontAwesomeIcon
+    icon={faArrowLeft}
+    className="back-icon"
+    onClick={() => navigate("/")}
+    style={{
+      cursor: "pointer",
+      fontSize: "1.5rem",
+      position: "absolute",  // <-- key change
+      top: "20px",           // distance from top
+      left: "20px",          // distance from left
+      zIndex: 10,            // ensures it’s above other elements
+    }}
+  />
+
         <form onSubmit={handleSignInSubmit}>
           <h1>Login</h1>
 
@@ -246,14 +283,19 @@ const Auth: React.FC = () => {
             required
           />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={loginForm.password}
-            onChange={handleLoginChange}
-            required
-          />
+          <div className="password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={loginForm.password}
+              onChange={handleLoginChange}
+              required
+            />
+            <button type="button" onClick={() => setShowPassword(!showPassword)}>
+              <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+            </button>
+          </div>
 
           <a href="#">Forget Your Password?</a>
 
