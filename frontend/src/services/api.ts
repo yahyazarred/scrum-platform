@@ -20,7 +20,7 @@ export interface UserProfile {
   status: string;
 }
 
-// ── Shared request helper ─────────────────────────────────────────────────────
+// ============= Shared request helper =================
 async function request<T>(
   endpoint: string,
   options: { method?: string; body?: object; token?: string } = {}
@@ -41,7 +41,7 @@ async function request<T>(
   return json as T;
 }
 
-// ── Auth endpoints ────────────────────────────────────────────────────────────
+// ========= Auth endpoints =============//
 
 export const signup = (data: {
   firstName: string;
@@ -62,7 +62,10 @@ export const verifyEmail = (data: { email: string; code: string }) =>
 export const resendVerification = (token: string) =>
   request<AuthResponse>("/auth/resend-verification", { method: "POST", token });
 
-// ── User endpoints ────────────────────────────────────────────────────────────
+// ======== User endpoints =========//
 
 export const getMe = (token: string) =>
   request<UserProfile>("/user/me", { token });
+
+export const updateMe = (token: string, data: { firstName?: string; lastName?: string; email?: string }) =>
+  request<UserProfile>("/user/me", { method: "PUT", body: data, token });

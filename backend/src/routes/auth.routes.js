@@ -1,13 +1,7 @@
 // ============================================================
-// routes/auth.routes.js
-//
 // What is this file?
-//   Maps URLs to controller functions for auth actions.
-//   These routes are PUBLIC — no token needed.
-//
-// How it connects:
-//   app.js says: app.use('/api/auth', authRoutes)
-//   So "/signup" here becomes "/api/auth/signup" in the real app.
+//   Maps URLs to controller functions for auth actions
+//   These routes are public (no token needed) except for resend verification
 // ============================================================
 
 const express = require("express");

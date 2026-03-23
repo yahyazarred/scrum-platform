@@ -1,7 +1,6 @@
-
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/ScrumbleLogo2.png";
-import './Landing.css';
+import "./Landing.css";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -17,15 +16,15 @@ const Landing = () => {
 
         <div className="content-wrapper">
           <div className="logo-container">
-    <img src={logo} alt="Scrumble Logo" className="landing-logo" />
-  </div>
+            <img src={logo} alt="Scrumble Logo" className="landing-logo" />
+          </div>
           <h1 className="main-title">
             Welcome to <span className="highlight">Scrumble</span>
           </h1>
-          <br/>
+          <br />
           <p className="tagline">
-            a scrum based project management plateform 
-            <br/>
+            a scrum based project management plateform
+            <br />
             for maximum efficiency and optimal results
           </p>
 
@@ -44,7 +43,7 @@ const Landing = () => {
             </div>
           </div>
 
-          <button className="cta-button" onClick={() => navigate('/auth')}>
+          <button className="cta-button" onClick={() => navigate("/auth")}>
             Get started!
             <span className="button-glow"></span>
           </button>

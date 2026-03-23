@@ -1,3 +1,9 @@
+// ============================================================
+// What is this file?
+//   creates the EmailVerification entity in the database
+//   this is a temporary entity that holds the verification code that is sent by email
+//   its deleted once the email is verified or the code expires
+// ============================================================
 const mongoose = require("mongoose");
 
 const emailVerificationSchema = new mongoose.Schema(

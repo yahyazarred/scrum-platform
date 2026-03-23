@@ -1,15 +1,9 @@
 // ============================================================
-// controllers/resend.controller.js  (add to auth.controller.js if you prefer)
-//
-// POST /api/auth/resend-verification
-// Protected — requires a valid JWT (user must be logged in)
-//
 // What it does:
 //   1. Gets the user from the token (req.user set by middleware)
 //   2. Checks they are actually still unverified
 //   3. Generates a fresh 6-digit code (replaces any old one)
 //   4. Sends the email
-//   5. Responds with success
 // ============================================================
 
 const User = require("../models/User");

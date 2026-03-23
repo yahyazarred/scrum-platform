@@ -328,3 +328,78 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ── Add these to the bottom of Profile.css ── */
+
+.profile-edit-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  color: inherit;
+  font-size: 0.95rem;
+  padding: 2px 4px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.profile-edit-input:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+}
+
+.edit-profile-btn {
+  margin-top: 30px;
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.save-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #4db8e8;
+  color: #0a0f16;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.save-btn:hover:not(:disabled) { opacity: 0.85; }
+.save-btn:disabled              { opacity: 0.5; cursor: not-allowed; }
+
+.cancel-btn {
+  padding: 10px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cancel-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.07); }
+.cancel-btn:disabled              { opacity: 0.5; cursor: not-allowed; }

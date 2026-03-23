@@ -1,12 +1,6 @@
 // ============================================================
-// controllers/auth.controller.js
+// what is thi file?
 //
-// Handles signup, email verification, and login.
-//
-// Fixes vs old version:
-//   - signup: email sent BEFORE response (fail-safe)
-//   - login: now returns firstName + lastName
-//   - All tokens have 7d expiry via shared signToken helper
 // ============================================================
 
 const User = require("../models/User");
@@ -15,11 +9,17 @@ const sendVerificationEmail = require("../utils/mailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// Helper: every token in this file uses the same secret + expiry
-const signToken = (userId, status) =>
-  jwt.sign({ userId, status }, process.env.JWT_SECRET, { expiresIn: "1d" });
+const signToken = (user) =>
+  jwt.sign(
+    {
+      userId:    user._id,
+      status:    user.status,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
 
-// ================= POST /api/auth/signup ================= //
+// ================= signup ================= //
 exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, dateOfBirth, email, password } = req.body;
@@ -38,7 +38,6 @@ exports.signup = async (req, res) => {
     await EmailVerification.deleteOne({ email });
     await EmailVerification.create({ email, code: verificationCode, expiresAt });
 
-    // FIX: send email BEFORE responding — if it fails, user gets an error
     console.log(`[DEV] Verification code for ${email}: ${verificationCode}`);
     await sendVerificationEmail(email, verificationCode);
 
@@ -49,7 +48,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-// ================= POST /api/auth/verify-email ================= //
+// ================= verify-email ================= //
 exports.verifyEmail = async (req, res) => {
   try {
     const { email, code } = req.body;
@@ -73,14 +72,11 @@ exports.verifyEmail = async (req, res) => {
 
     await EmailVerification.deleteOne({ email });
 
-    const token = signToken(user._id, user.status);
+    const token = signToken(user);
 
     res.status(200).json({
       message: "Email verified! Welcome aboard.",
       token,
-      status: user.status,
-      firstName: user.firstName,
-      lastName: user.lastName,
     });
   } catch (err) {
     console.error("Verification error:", err.message);
@@ -88,7 +84,7 @@ exports.verifyEmail = async (req, res) => {
   }
 };
 
-// ================= POST /api/auth/login ================= //
+// ================= login ================= //
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -99,16 +95,9 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
-    const token = signToken(user._id, user.status);
+    const token = signToken(user);
 
-    // FIX: return firstName + lastName so frontend can save them
-    res.json({
-      message: "Login successful",
-      token,
-      status: user.status,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    });
+    res.json({ message: "Login successful", token });
   } catch (err) {
     console.error("Login error:", err.message);
     res.status(500).json({ error: err.message });

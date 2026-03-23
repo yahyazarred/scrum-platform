@@ -1,30 +1,29 @@
-// ============================================================
-// pages/Dashboard.tsx
-//
-// Fix vs old version:
-//   - Removed the dead JWT decode block (it decoded token but
-//     then ignored the result and hardcoded initials = 'U')
-//   - Now reads userName from localStorage (set at login/verify)
-//     and builds real initials from it
-// ============================================================
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { getMe } from '../services/api';
+import type { UserProfile } from '../services/api';
 import logo from "../assets/ScrumbleLogo2.png";
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate          = useNavigate();
+  const { token, logout } = useAuth(); 
+  const [user, setUser]   = useState<UserProfile | null>(null);
 
-  // userName is saved to localStorage at login and at email verification
-  const userName = localStorage.getItem('userName') ?? '';
+  useEffect(() => {
+    if (!token) { navigate('/auth'); return; }
 
-  // Build initials from "First Last" → "FL"
-  const initials = userName
-    .split(' ')
-    .map((part) => part.charAt(0))
-    .join('')
-    .toUpperCase() || '?';
+    getMe(token)
+      .then(setUser)
+      .catch(() => {
+        logout();
+      });
+  }, [token]);
+
+  const initials = user
+    ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase()
+    : '?';
 
   return (
     <div className="dashboard-wrapper">
@@ -33,10 +32,9 @@ const Dashboard: React.FC = () => {
           <div className="logo-placeholder"><img src={logo} alt="Logo" /></div>
           <span className="logo-text">Scrum<span>ble</span></span>
         </div>
-
         <button className="profile-btn" onClick={() => navigate('/profile')}>
           <div className="profile-avatar">{initials}</div>
-          {userName || 'My Profile'}
+          {user ? `${user.firstName} ${user.lastName}` : '…'}
         </button>
       </header>
 

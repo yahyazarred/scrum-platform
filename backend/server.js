@@ -1,6 +1,4 @@
-// ============================================================
-// server.js
-//
+// ============================================================s
 // What is this file?
 //   The entry point. Connects to MongoDB, then starts the server.
 //   Run this file with: node server.js
