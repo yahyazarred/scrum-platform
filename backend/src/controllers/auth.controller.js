@@ -17,7 +17,7 @@ const jwt = require("jsonwebtoken");
 
 // Helper: every token in this file uses the same secret + expiry
 const signToken = (userId, status) =>
-  jwt.sign({ userId, status }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  jwt.sign({ userId, status }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
 // ================= POST /api/auth/signup ================= //
 exports.signup = async (req, res) => {
