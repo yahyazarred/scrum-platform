@@ -1,82 +1,121 @@
-.dashboard-card {
-  background: white;
-  border-radius: 20px;
-  padding: 40px;
-  max-width: 600px;
-  width: 100%;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.dashboard-title {
-  font-size: 32px;
-  margin-bottom: 10px;
-  color: #333;
+body {
+    background-image: url(../assets/projects\ background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
 }
 
-.dashboard-welcome {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 30px;
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
 }
 
-.dashboard-info {
-  background: #f5f5f5;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+/* ── Header ── */
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 70px;
+    width: 100%;
+    background: rgba(15, 22, 32, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(77, 184, 232, 0.18);
+    position: fixed;   /* ← was sticky */
+    top: 0;
+    left: 0;           /* ← add this */
+    z-index: 100;
 }
 
-.dashboard-info p {
-  margin-bottom: 10px;
-  color: #555;
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.status-badge {
-  background: #4CAF50;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 14px;
+.logo-placeholder {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    margin-top: 13px;
 }
 
-.status-badge.pending {
-  background: #ff9800;
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
 }
 
-.token-display {
-  font-size: 12px;
-  word-break: break-all;
-  margin-top: 15px;
+.logo-text span {
+    color: #4db8e8;
 }
 
-.token-code {
-  background: #e0e0e0;
-  padding: 8px;
-  border-radius: 5px;
-  display: block;
-  margin-top: 5px;
-  font-family: monospace;
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(77, 184, 232, 0.08);
+    border: 1px solid rgba(77, 184, 232, 0.3);
+    border-radius: 50px;
+    padding: 8px 20px 8px 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #b0c4de;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-.logout-button {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 25px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
+.profile-btn:hover {
+    background: rgba(77, 184, 232, 0.18);
+    border-color: #4db8e8;
+    box-shadow: 0 0 20px rgba(77, 184, 232, 0.25);
+    color: #ffffff;
 }
 
-.logout-button:hover {
-  background: #5568d3;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+.profile-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.4);
 }
 
-.logout-button:active {
-  transform: translateY(0);
+/* ── Main content area ── */
+.dashboard-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    padding-top: 110px; /* ← 70px header + 40px original top padding */
+}
+
+.logo-placeholder img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
 }

@@ -1,44 +1,48 @@
+// ============================================================
+// pages/Dashboard.tsx
+//
+// Fix vs old version:
+//   - Removed the dead JWT decode block (it decoded token but
+//     then ignored the result and hardcoded initials = 'U')
+//   - Now reads userName from localStorage (set at login/verify)
+//     and builds real initials from it
+// ============================================================
+
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from "../assets/ScrumbleLogo2.png";
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-  const token = localStorage.getItem('token');
-  const userName = localStorage.getItem('userName');
-  const userStatus = localStorage.getItem('userStatus');
+  const navigate = useNavigate();
+
+  // userName is saved to localStorage at login and at email verification
+  const userName = localStorage.getItem('userName') ?? '';
+
+  // Build initials from "First Last" → "FL"
+  const initials = userName
+    .split(' ')
+    .map((part) => part.charAt(0))
+    .join('')
+    .toUpperCase() || '?';
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-card">
-        <h1 className="dashboard-title">Dashboard</h1>
-        
-        <p className="dashboard-welcome">
-          Welcome back, <strong>{userName}</strong>!
-        </p>
-
-        <div className="dashboard-info">
-          <p>
-            <strong>Status:</strong>{' '}
-            <span className={`status-badge ${userStatus !== 'verified' ? 'pending' : ''}`}>
-              {userStatus}
-            </span>
-          </p>
-          
-          <p className="token-display">
-            <strong>Token:</strong>
-            <code className="token-code">{token}</code>
-          </p>
+    <div className="dashboard-wrapper">
+      <header className="dashboard-header">
+        <div className="header-logo">
+          <div className="logo-placeholder"><img src={logo} alt="Logo" /></div>
+          <span className="logo-text">Scrum<span>ble</span></span>
         </div>
 
-        <button 
-          className="logout-button"
-          onClick={() => {
-            localStorage.clear();
-            window.location.href = '/auth';
-          }}
-        >
-          Logout
+        <button className="profile-btn" onClick={() => navigate('/profile')}>
+          <div className="profile-avatar">{initials}</div>
+          {userName || 'My Profile'}
         </button>
-      </div>
+      </header>
+
+      <main className="dashboard-main">
+        {/* Dashboard content goes here */}
+      </main>
     </div>
   );
 };

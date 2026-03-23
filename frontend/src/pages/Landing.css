@@ -9,7 +9,10 @@
 
 .landing {
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #0a0e1a 0%, #1a2332 50%, #2d1b3d 100%);
+    background-image: url(../assets/projects\ background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
@@ -239,12 +242,7 @@
     }
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-    .main-title {
-        font-size: 5rem;
-    }
-}
+
 
 @media (max-width: 768px) {
     .main-title {
@@ -276,4 +274,14 @@
     .main-title {
         font-size: 2.5rem;
     }
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -140px;
+}
+
+.landing-logo {
+  width: 750px;   /* adjust size as you like */
 }

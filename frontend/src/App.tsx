@@ -3,8 +3,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Landing from './pages/Landing';
 import Verify from "./pages/Verify";
-import Auth from "./pages/auth";
+import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/auth" element={<Auth/>} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <ToastContainer
           position="top-right"

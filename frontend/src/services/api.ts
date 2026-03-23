@@ -1,85 +1,68 @@
+// ============================================================
+// services/api.ts
+// ============================================================
+
 const API_URL = "http://localhost:5000/api";
 
-interface AuthResponse {
+export interface AuthResponse {
   message?: string;
   token?: string;
   status?: string;
   firstName?: string;
   lastName?: string;
+  email?: string;
 }
 
-export const signup = async (data: {
+export interface UserProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: string;
+}
+
+// ── Shared request helper ─────────────────────────────────────────────────────
+async function request<T>(
+  endpoint: string,
+  options: { method?: string; body?: object; token?: string } = {}
+): Promise<T> {
+  const headers: Record<string, string> = {};
+
+  if (options.body)  headers["Content-Type"]  = "application/json";
+  if (options.token) headers["Authorization"] = `Bearer ${options.token}`;
+
+  const res = await fetch(`${API_URL}${endpoint}`, {
+    method: options.method ?? "GET",
+    headers,
+    body: options.body ? JSON.stringify(options.body) : undefined,
+  });
+
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message ?? "Something went wrong");
+  return json as T;
+}
+
+// ── Auth endpoints ────────────────────────────────────────────────────────────
+
+export const signup = (data: {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
   email: string;
   password: string;
-}): Promise<AuthResponse> => {
-  const res = await fetch(`${API_URL}/auth/signup`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+}) => request<AuthResponse>("/auth/signup", { method: "POST", body: data });
 
-  const json = await res.json();
-  
-  if (!res.ok) {
-    throw new Error(json.message || 'Signup failed');
-  }
+export const login = (data: { email: string; password: string }) =>
+  request<AuthResponse>("/auth/login", { method: "POST", body: data });
 
-  return json;
-};
+export const verifyEmail = (data: { email: string; code: string }) =>
+  request<AuthResponse>("/auth/verify-email", { method: "POST", body: data });
 
-export const verifyEmail = async (data: {
-  email: string;
-  code: string;
-}): Promise<AuthResponse> => {
-  const res = await fetch(`${API_URL}/auth/verify-email`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+// Sends a fresh verification code to the logged-in user's email.
+// Returns { message, email } so the frontend knows where to redirect.
+export const resendVerification = (token: string) =>
+  request<AuthResponse>("/auth/resend-verification", { method: "POST", token });
 
-  const json = await res.json();
-  
-  if (!res.ok) {
-    throw new Error(json.message || 'Verification failed');
-  }
+// ── User endpoints ────────────────────────────────────────────────────────────
 
-  return json;
-};
-
-export const login = async (data: {
-  email: string;
-  password: string;
-}): Promise<AuthResponse> => {
-  const res = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-  const json = await res.json();
-  
-  if (!res.ok) {
-    throw new Error(json.message || 'Login failed');
-  }
-
-  return json;
-};
-
-export const getMe = async (token: string) => {
-  const res = await fetch(`${API_URL}/user/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const json = await res.json();
-  
-  if (!res.ok) {
-    throw new Error(json.message || 'Failed to fetch user data');
-  }
-
-  return json;
-};
+export const getMe = (token: string) =>
+  request<UserProfile>("/user/me", { token });

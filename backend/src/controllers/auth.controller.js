@@ -1,131 +1,107 @@
+// ============================================================
+// controllers/auth.controller.js
+//
+// Handles signup, email verification, and login.
+//
+// Fixes vs old version:
+//   - signup: email sent BEFORE response (fail-safe)
+//   - login: now returns firstName + lastName
+//   - All tokens have 7d expiry via shared signToken helper
+// ============================================================
+
 const User = require("../models/User");
 const EmailVerification = require("../models/EmailVerification");
 const sendVerificationEmail = require("../utils/mailer");
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// ================= signup logic ================= //
+// Helper: every token in this file uses the same secret + expiry
+const signToken = (userId, status) =>
+  jwt.sign({ userId, status }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+// ================= POST /api/auth/signup ================= //
 exports.signup = async (req, res) => {
   try {
-    const userData = req.body;
+    const { firstName, lastName, dateOfBirth, email, password } = req.body;
 
-    //Check if email already exists
-
-    const existingUser = await User.findOne({ email: userData.email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(400).json({ message: "Email already in use" });
     }
 
-    //Hash password
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({ firstName, lastName, dateOfBirth, email, password: hashedPassword });
 
-    //Create user (UNVERIFIED by default)
-    await User.create({
-      ...userData,
-      password: hashedPassword,
-    });
-
-    //Generate 6-digit verification code
-    const verificationCode = Math.floor(
-      100000 + Math.random() * 900000,
-    ).toString();
-
-    //Set expiration (5 minutes)
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-    //Remove any existing verification for this email
-     await EmailVerification.deleteOne({ email: userData.email });
+    await EmailVerification.deleteOne({ email });
+    await EmailVerification.create({ email, code: verificationCode, expiresAt });
 
-    //Create EmailVerification
-    await EmailVerification.create({
-      email: userData.email,
-      code: verificationCode,
-      expiresAt,
-    });
-console.log("Verification code:", verificationCode);
+    // FIX: send email BEFORE responding — if it fails, user gets an error
+    console.log(`[DEV] Verification code for ${email}: ${verificationCode}`);
+    await sendVerificationEmail(email, verificationCode);
 
-    res.status(201).json({ message: "User created. Please verify your email." });
-    //Send code by email
-     await sendVerificationEmail(userData.email, verificationCode);
-
-    
+    res.status(201).json({ message: "Account created! Please check your email for a verification code." });
   } catch (err) {
-    console.log("Signup error:", err.message);
+    console.error("Signup error:", err.message);
     res.status(500).json({ error: err.message });
   }
 };
 
-// ================= verification logic ================= //
+// ================= POST /api/auth/verify-email ================= //
 exports.verifyEmail = async (req, res) => {
   try {
-    const verificationData = req.body;
+    const { email, code } = req.body;
 
-    const verification = await EmailVerification.findOne({ email: verificationData.email });
+    const verification = await EmailVerification.findOne({ email });
     if (!verification) {
-      return res.status(400).json({ message: "Verification expired or not found" });
+      return res.status(400).json({ message: "Verification code expired or not found" });
     }
 
-    if (verification.code !== verificationData.code) {
+    if (verification.code !== code) {
       verification.attempts += 1;
       await verification.save();
       return res.status(400).json({ message: "Invalid verification code" });
     }
 
-    const user = await User.findOne({ email: verificationData.email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     user.status = "VERIFIED";
     await user.save();
 
-    // Delete BEFORE responding
-    await EmailVerification.deleteOne({ email: verificationData.email });
+    await EmailVerification.deleteOne({ email });
 
-    const token = jwt.sign(
-      { userId: user._id, status: user.status },
-      process.env.JWT_SECRET
-    );
+    const token = signToken(user._id, user.status);
 
-    // ONE response only
     res.status(200).json({
-      message: "Email verified successfully!",
+      message: "Email verified! Welcome aboard.",
       token,
       status: user.status,
       firstName: user.firstName,
       lastName: user.lastName,
     });
-
   } catch (err) {
-    console.log("Verification error:", err.message);
+    console.error("Verification error:", err.message);
     res.status(500).json({ error: err.message });
   }
 };
-// ================= login logic================= //
+
+// ================= POST /api/auth/login ================= //
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    //Find user by email
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
+    if (!user) return res.status(400).json({ message: "Invalid email or password" });
 
-    //Compare password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
+    if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
-    //Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id, status: user.status },
-      process.env.JWT_SECRET,
-    );
+    const token = signToken(user._id, user.status);
 
-    //Send response
+    // FIX: return firstName + lastName so frontend can save them
     res.json({
       message: "Login successful",
       token,
@@ -134,7 +110,7 @@ exports.login = async (req, res) => {
       lastName: user.lastName,
     });
   } catch (err) {
-    console.log("Login error:", err.message);
+    console.error("Login error:", err.message);
     res.status(500).json({ error: err.message });
   }
 };

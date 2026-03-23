@@ -1,5 +1,6 @@
 
 import { useNavigate } from 'react-router-dom';
+import logo from "../assets/ScrumbleLogo2.png";
 import './Landing.css';
 
 const Landing = () => {
@@ -15,6 +16,9 @@ const Landing = () => {
         </div>
 
         <div className="content-wrapper">
+          <div className="logo-container">
+    <img src={logo} alt="Scrumble Logo" className="landing-logo" />
+  </div>
           <h1 className="main-title">
             Welcome to <span className="highlight">Scrumble</span>
           </h1>
