@@ -1,0 +1,388 @@
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ── Header (same as Dashboard) ── */
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 70px;
+    background: rgba(15, 22, 32, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(77, 184, 232, 0.18);
+    position: fixed;   
+    top: 0;
+    left: 0;           
+    width: 100%;      
+    z-index: 100;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-placeholder {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    margin-top: 13px;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.logo-text span {
+    color: #4db8e8;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(77, 184, 232, 0.08);
+    border: 1px solid rgba(77, 184, 232, 0.3);
+    border-radius: 30px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #b0c4de;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    background: rgba(77, 184, 232, 0.18);
+    border-color: #4db8e8;
+    box-shadow: 0 0 20px rgba(77, 184, 232, 0.25);
+    color: #ffffff;
+}
+
+/* ── Main ── */
+.profile-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 110px 20px 40px; 
+}
+
+/* ── Card ── */
+.profile-card {
+    background: linear-gradient(135deg, #1a2540 0%, #1e2a45 100%);
+    border-radius: 30px;
+    border: 1px solid rgba(77, 184, 232, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
+                0 0 60px rgba(77, 184, 232, 0.08);
+    width: 100%;
+    max-width: 700px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease forwards;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Card top banner ── */
+.profile-banner {
+    height: 100px;
+    background: linear-gradient(135deg, #1e3a52 0%, #2d5a7b 50%, #3a6d8f 100%);
+    position: relative;
+    box-shadow: inset 0 0 60px rgba(77, 184, 232, 0.15);
+}
+
+/* ── Avatar ── */
+.profile-avatar-large {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    border: 4px solid #1a2540;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ── Card body ── */
+.profile-body {
+    padding: 60px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+}
+
+.profile-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 4px;
+}
+
+.profile-status-badge.verified {
+    background: rgba(52, 211, 153, 0.15);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    color: #34d399;
+}
+
+.profile-status-badge.pending {
+    background: rgba(251, 36, 36, 0.15);
+    border: 1px solid rgba(251, 36, 36, 0.4);
+    color: #f60202;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ── Info rows ── */
+.profile-info-section {
+    width: 100%;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.profile-info-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(77, 184, 232, 0.12);
+    border-radius: 12px;
+    padding: 14px 18px;
+    transition: border-color 0.2s ease;
+}
+
+.profile-info-row:hover {
+    border-color: rgba(77, 184, 232, 0.3);
+}
+
+.info-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 32px;
+    text-align: center;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.info-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4db8e8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #d0dce8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Loading / Error states ── */
+.profile-loading,
+.profile-error {
+    text-align: center;
+    color: #6a7a94;
+    font-size: 15px;
+    padding: 40px 0 20px;
+}
+
+.profile-error {
+    color: #f87171;
+}
+
+/* ── Logout button ── */
+.logout-btn {
+    margin-top: 30px;
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+}
+
+.logo-placeholder img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+}
+
+.verify-banner {
+  background: rgba(255, 50, 50, 0.08);
+  border: 1px solid rgba(255, 50, 50, 0.35);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 16px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.verify-banner-text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #ffffff;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.verify-account-btn {
+  align-self: center;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff3535 0%, #f71e1e 100%);;
+  color: #1a1a2e;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.verify-account-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.verify-account-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Add these to the bottom of Profile.css ── */
+
+.profile-edit-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  color: inherit;
+  font-size: 0.95rem;
+  padding: 2px 4px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.profile-edit-input:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+}
+
+.edit-profile-btn {
+  margin-top: 30px;
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.save-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #4db8e8;
+  color: #0a0f16;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.save-btn:hover:not(:disabled) { opacity: 0.85; }
+.save-btn:disabled              { opacity: 0.5; cursor: not-allowed; }
+
+.cancel-btn {
+  padding: 10px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cancel-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.07); }
+.cancel-btn:disabled              { opacity: 0.5; cursor: not-allowed; }
