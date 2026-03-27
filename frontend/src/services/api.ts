@@ -69,3 +69,35 @@ export const getMe = (token: string) =>
 
 export const updateMe = (token: string, data: { firstName?: string; lastName?: string; email?: string }) =>
   request<UserProfile>("/user/me", { method: "PUT", body: data, token });
+
+// ======== Project endpoints =========//
+
+export interface ProjectData {
+  _id: string;
+  name: string;
+  description?: string;
+  sprintDuration: string;
+  projectGoal: string;
+  githubLink?: string;
+  joinCodes?: {
+    scrumMaster: string;
+    developer: string;
+  };
+  createdAt: string;
+}
+
+export interface ProjectMembershipData {
+  _id: string;
+  user: string;
+  project: ProjectData;
+  role: "product_owner" | "scrum_master" | "developer";
+}
+
+export const createProject = (token: string, data: { name: string; description?: string; sprintDuration: string; projectGoal: string; githubLink?: string }) =>
+  request<{ message: string; project: ProjectData; membership: ProjectMembershipData }>("/projects", { method: "POST", body: data, token });
+
+export const getUserProjects = (token: string) =>
+  request<ProjectMembershipData[]>("/projects/my-projects", { token });
+
+export const joinProject = (token: string, data: { joinCode: string }) =>
+  request<{ message: string; project: ProjectData; role: string }>("/projects/join", { method: "POST", body: data, token });
