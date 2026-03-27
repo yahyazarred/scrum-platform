@@ -100,8 +100,9 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <div className={`container ${isActive ? "active" : ""}`} id="container">
-      {/* ================= SIGN UP PANEL ================= */}
+    <div className="auth-wrapper">
+      <div className={`container ${isActive ? "active" : ""}`} id="container">
+        {/* ================= SIGN UP PANEL ================= */}
       <div className="form-container sign-up">
         <FontAwesomeIcon
           icon={faArrowLeft}
@@ -216,6 +217,7 @@ const Auth: React.FC = () => {
             <button className="hidden" onClick={handleRegisterClick} type="button">Sign Up</button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

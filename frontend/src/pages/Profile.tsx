@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
-import { getMe, resendVerification, updateMe } from '../services/api';  // ← added updateMe
+import { getMe, resendVerification, updateMe } from '../services/api';
 import logo from "../assets/ScrumbleLogo2.png";
 import type { UserProfile } from '../services/api';
 import './Profile.css';
@@ -15,7 +15,7 @@ const Profile: React.FC = () => {
   const [error, setError]         = useState<string | null>(null);
   const [resending, setResending] = useState(false);
 
-  // ── Edit mode state ───────────────────────────────────────
+  //Edit mode state 
   // editing: whether the form is open or not
   // editForm: the live values in the input fields while editing
   // saving: disables Save button while request is in flight
@@ -32,21 +32,20 @@ const Profile: React.FC = () => {
       .finally(() => setLoading(false));
   }, [token]);
 
-  // ── Open edit mode ────────────────────────────────────────
-  // Pre-fill the inputs with the current values so the user
-  // doesn't have to retype everything from scratch
+
+  // Pre-fill the inputs with the current values so the user doesn't have to retype everything from scratch
   const handleEditClick = () => {
     if (!user) return;
     setEditForm({ firstName: user.firstName, lastName: user.lastName, email: user.email });
     setEditing(true);
   };
 
-  // ── Cancel edit ───────────────────────────────────────────
+  // Cancel edit
   const handleCancel = () => {
     setEditing(false);
   };
 
-  // ── Save changes ──────────────────────────────────────────
+  // Save changes
   const handleSave = async () => {
     if (!token) return;
     setSaving(true);
@@ -188,7 +187,7 @@ const Profile: React.FC = () => {
 
                 </div>
 
-                {/* ── Edit / Save / Cancel buttons ── */}
+                {/*Edit / Save / Cancel buttons */}
                 {!editing ? (
                   <button className="edit-profile-btn" onClick={handleEditClick}>
                     Edit Profile
