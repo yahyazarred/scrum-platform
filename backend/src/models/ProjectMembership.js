@@ -1,11 +1,14 @@
+// Note: ProjectMembership Schema tracks the roles of users in a project (product_owner, scrum_master, developer)
+const mongoose = require("mongoose");
+
 const membershipSchema = new mongoose.Schema({
-  User: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
 
-  Project: {
+  project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
     required: true,
@@ -17,3 +20,5 @@ const membershipSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+module.exports = mongoose.model("ProjectMembership", membershipSchema);

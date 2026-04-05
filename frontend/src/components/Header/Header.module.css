@@ -1,0 +1,54 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 70px;
+    width: 100%;
+    background: var(--bg-dark);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--primary-blue-light);
+    position: fixed;   
+    top: 0;
+    left: 0;           
+    z-index: 100;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logoPlaceholder {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    margin-top: 13px;
+}
+
+.logoPlaceholder img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+}
+
+.logoText {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.logoText span {
+    color: var(--primary-blue);
+}
+
+.rightSide {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}

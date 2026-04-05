@@ -12,10 +12,11 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './context/ProtectedRoute';
 
 import Landing   from './pages/Landing';
-import Auth      from './pages/Auth';
+import Auth      from './pages/auth';
 import Verify    from './pages/Verify';
 import Dashboard from './pages/Dashboard';
 import Profile   from './pages/Profile';
+import ProjectDashboard from './pages/ProjectDashboard';
 
 export default function App() {
   return (
@@ -32,6 +33,10 @@ export default function App() {
         } />
         <Route path="/profile" element={
           <ProtectedRoute><Profile /></ProtectedRoute>
+        } />
+        {/* Project View — Dynamic route passing state (project name & role) for rendering without redundant fetches */}
+        <Route path="/project/:projectId" element={
+          <ProtectedRoute><ProjectDashboard /></ProtectedRoute>
         } />
       </Routes>
 

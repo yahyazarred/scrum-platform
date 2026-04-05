@@ -1,0 +1,137 @@
+.projectCard {
+    background: var(--bg-dark);
+    border: 1px solid var(--primary-blue-light);
+    border-radius: 16px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    cursor: pointer;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.projectCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-orange-border);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.title {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.githubLink {
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.githubLink:hover {
+    color: #fff;
+}
+
+.projectGoal {
+    background: var(--primary-blue-light);
+    border-left: 3px solid var(--primary-blue);
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #e2e8f0;
+}
+
+.projectGoal strong {
+    color: var(--primary-blue);
+}
+
+.projectDesc {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.projectRole {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roleBadge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Specific Role Colors */
+.product_owner, .product_owner {
+    background: var(--primary-orange-light);
+    color: var(--primary-orange);
+    border: 1px solid var(--primary-orange-border);
+}
+
+.scrum_master, .scrum_master {
+    background: rgba(155, 89, 182, 0.15);
+    color: #9b59b6;
+    border: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+.developer, .developer {
+    background: var(--primary-blue-light);
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue-border);
+}
+
+.joinCodesContainer {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.codeRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.codeRow span {
+    color: var(--text-muted);
+}
+
+.codeRow code {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.codeOrange { color: var(--primary-orange); }
+.codeBlue { color: var(--primary-blue); }

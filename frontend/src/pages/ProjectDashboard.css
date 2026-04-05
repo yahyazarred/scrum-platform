@@ -1,0 +1,116 @@
+/* src/pages/ProjectDashboard.css */
+
+.project-dashboard-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.back-to-dashboard-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(77, 184, 232, 0.08);
+    border: 1px solid rgba(77, 184, 232, 0.3);
+    border-radius: 30px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #b0c4de;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-to-dashboard-btn:hover {
+    background: rgba(77, 184, 232, 0.18);
+    border-color: #4db8e8;
+    box-shadow: 0 0 20px rgba(77, 184, 232, 0.25);
+    color: #ffffff;
+}
+
+.project-layout-container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    margin-top: 70px;
+    height: calc(100vh - 70px); 
+    overflow: hidden; 
+}
+
+.project-sidebar {
+    width: 260px;
+    background-color: var(--bg-dark);
+    border-right: 1px solid var(--primary-blue-light);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+}
+
+.sidebar-header {
+    padding: 0 20px 24px 20px;
+    border-bottom: 1px solid var(--primary-blue-light);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar-role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: fit-content;
+}
+
+/* Specific Role Colors mirrored from ProjectCard */
+.product_owner, .product_owner {
+    background: var(--primary-orange-light);
+    color: var(--primary-orange);
+    border: 1px solid var(--primary-orange-border);
+}
+
+.scrum_master, .scrum_master {
+    background: rgba(155, 89, 182, 0.15);
+    color: #9b59b6;
+    border: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+.developer, .developer {
+    background: var(--primary-blue-light);
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue-border);
+}
+
+.project-title {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.project-main-content {
+    flex: 1;
+    background-color: rgba(15, 22, 32, 0.4);
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.placeholder-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 400px;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}

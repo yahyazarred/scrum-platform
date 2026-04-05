@@ -10,6 +10,20 @@ const projectSchema = new mongoose.Schema({
     type: String,
   },
 
+  sprintDuration: {
+    type: String,
+    required: true,
+  },
+
+  projectGoal: {
+    type: String,
+    required: true,
+  },
+
+  githubLink: {
+    type: String,
+  },
+
   joinCodes: {
     scrumMaster: {
       type: String,
@@ -21,11 +35,6 @@ const projectSchema = new mongoose.Schema({
     },
   },
 
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
 
   createdAt: {
     type: Date,

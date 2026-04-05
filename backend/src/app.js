@@ -26,6 +26,9 @@ app.use("/api/auth", authRoutes);
 const userRoutes = require("./routes/user.routes");
 app.use("/api/user", userRoutes);  
 
+const projectRoutes = require("./routes/project.routes");
+app.use("/api/projects", projectRoutes);
+
 app.get("/", (req, res) => {
   res.json({ message: "Scrumble API running" });
 });
