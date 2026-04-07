@@ -41,7 +41,7 @@ export default function App() {
       </Routes>
 
       <ToastContainer
-        position="top-right"
+        position="top-center"
         autoClose={4000}
         theme="dark"
       />

@@ -1,3 +1,4 @@
+/* The base styling applied to every single `<Button>` component regardless of color */
 .button {
     padding: 10px 24px;
     border-radius: 8px;
@@ -12,6 +13,7 @@
     gap: 8px;
 }
 
+/* Grays out the button and makes it unclickable when `disabled={true}` is passed */
 .button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -21,6 +23,8 @@
     filter: grayscale(80%);
 }
 
+ 
+ /* Primary Variant (orange) */
 .primary {
     background: linear-gradient(135deg, var(--primary-orange) 0%, #f7931e 100%);
     color: #fff;
@@ -32,6 +36,7 @@
     box-shadow: 0 6px 20px var(--primary-orange-hover);
 }
 
+/* Secondary Variant (blue) */
 .secondary {
     background: var(--primary-blue-light);
     color: var(--primary-blue);
@@ -44,6 +49,8 @@
     box-shadow: 0 4px 15px var(--primary-blue-light);
 }
 
+/* Ghost Variant Invisible background, text-only button used for "Cancel" or "Close" ...
+ */
 .ghost {
     background: transparent;
     color: var(--text-muted);

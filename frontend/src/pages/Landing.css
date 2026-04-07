@@ -1,4 +1,9 @@
-/* Landing.css */
+/* ========================================================
+   src/pages/Landing.css
+   Styles for the public Home screen before users log in
+   ======================================================== */
+
+/* The primary viewport container making sure it is exactly 1 screen tall */
 .landing {
     height: 100vh;
     width: 100vw;
@@ -6,6 +11,7 @@
     position: relative;
 }
 
+/* Flexbox wrapper centering all text directly in the middle */
 .landing-content {
     height: 100%;
     display: flex;
@@ -14,7 +20,9 @@
     position: relative;
 }
 
-/* Animated Background Orbs */
+/* ── Animated Background Orbs ── */
+
+/* Container managing the floating background effects */
 .main-visual {
     position: absolute;
     width: 100%;
@@ -24,6 +32,7 @@
     overflow: hidden;
 }
 
+/* The actual physical circular element used to generate glowing light */
 .glow-orb {
     position: absolute;
     border-radius: 50%;
@@ -32,6 +41,7 @@
     animation: float 15s infinite ease-in-out;
 }
 
+/* Large Blue Orb floating top left */
 .orb-1 {
     width: 600px;
     height: 600px;
@@ -41,6 +51,7 @@
     animation-delay: 0s;
 }
 
+/* Medium Orange Orb floating bottom right */
 .orb-2 {
     width: 500px;
     height: 500px;
@@ -50,6 +61,7 @@
     animation-delay: 5s;
 }
 
+/* Inner purple-ish Orb drifting near center */
 .orb-3 {
     width: 400px;
     height: 400px;
@@ -60,6 +72,7 @@
     animation-delay: 10s;
 }
 
+/* Animation track making the orbs drift aimlessly */
 @keyframes float {
     0%, 100% {
         transform: translate(0, 0) scale(1);
@@ -72,7 +85,8 @@
     }
 }
 
-/* Content */
+/* ── Main Marketing Content ── */
+/* Pushes the actual text forward over the background orbs */
 .content-wrapper {
     position: relative;
     z-index: 10;
@@ -81,6 +95,7 @@
     animation: fadeIn 1.2s ease-out;
 }
 
+/* The massive "Transform Your Agile" text */
 .main-title {
     font-size: 7rem;
     font-weight: 800;
@@ -91,6 +106,7 @@
     text-shadow: 0 0 40px rgba(77, 184, 232, 0.3);
 }
 
+/* The gradient colored word "Workflow." */
 .highlight {
     background: linear-gradient(135deg, #4db8e8 0%, #ff6b35 100%);
     -webkit-background-clip: text;
@@ -100,6 +116,7 @@
     display: inline-block;
 }
 
+/* The colored underline below "Workflow." */
 .highlight::after {
     content: '';
     position: absolute;
@@ -112,6 +129,7 @@
     box-shadow: 0 0 20px rgba(77, 184, 232, 0.6);
 }
 
+/* The subtitle under the main header */
 .tagline {
     font-size: 1.8rem;
     color: #b0c4de;
@@ -120,7 +138,7 @@
     letter-spacing: 2px;
 }
 
-/* Feature Highlights */
+/* ── Feature Highlights (10x Sprints, Zero Chaos) ── */
 .feature-highlights {
     display: flex;
     justify-content: center;
@@ -129,6 +147,7 @@
     flex-wrap: wrap;
 }
 
+/* The frosted glass pills holding the feature text */
 .highlight-item {
     display: flex;
     align-items: center;
@@ -147,6 +166,7 @@
     transform: translateY(-5px);
 }
 
+/* The large numerical number next to the feature text */
 .highlight-number {
     font-size: 1.5rem;
     font-weight: 700;
@@ -162,7 +182,7 @@
     font-weight: 500;
 }
 
-/* CTA Button */
+/* ── "START YOUR JOURNEY" Primary Button ── */
 .cta-button {
     position: relative;
     padding: 1.5rem 4rem;
@@ -180,6 +200,7 @@
     box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
 }
 
+/* The white 'shine' effect sliding across the button */
 .cta-button::before {
     content: '';
     position: absolute;
@@ -200,6 +221,7 @@
     box-shadow: 0 12px 40px rgba(255, 107, 53, 0.6);
 }
 
+/* Invisible background acting as a glowing backlight on hover */
 .button-glow {
     position: absolute;
     top: -2px;
@@ -218,6 +240,7 @@
     opacity: 0.8;
 }
 
+/* Starting animation sliding text from invisible bottom */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -229,40 +252,35 @@
     }
 }
 
-
-
+/* ── Mobile Layout Overrides ── */
 @media (max-width: 768px) {
     .main-title {
         font-size: 3.5rem;
     }
-    
     .tagline {
         font-size: 1.3rem;
     }
-    
     .feature-highlights {
         gap: 1.5rem;
         flex-direction: column;
         align-items: center;
     }
-    
     .cta-button {
         padding: 1.2rem 3rem;
         font-size: 1.1rem;
     }
-
     .orb-1, .orb-2, .orb-3 {
         width: 300px;
         height: 300px;
     }
 }
-
 @media (max-width: 480px) {
     .main-title {
         font-size: 2.5rem;
     }
 }
 
+/* Scrumble Image Logo at very top */
 .logo-container {
   display: flex;
   justify-content: center;

@@ -142,3 +142,79 @@ exports.joinProject = async (req, res) => {
     res.status(500).json({ message: "Server error joining project" });
   }
 };
+
+//=================get single project============
+exports.getProjectById = async (req, res) => {
+  try {
+    const projectId = req.params.projectId;
+    const project = await Project.findById(projectId);
+    
+    if (!project) {
+      return res.status(404).json({ message: "Project not found." });
+    }
+    
+    res.status(200).json(project);
+  } catch (error) {
+    console.error("Error fetching project:", error);
+    res.status(500).json({ message: "Server error fetching project" });
+  }
+};
+
+//=================update project===============
+exports.updateProject = async (req, res) => {
+  try {
+    const projectId = req.params.projectId;
+    const { name, description, sprintDuration, projectGoal, githubLink } = req.body;
+
+    const project = await Project.findByIdAndUpdate(
+      projectId,
+      {
+        name,
+        description,
+        sprintDuration,
+        projectGoal,
+        githubLink
+      },
+      { new: true }
+    );
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found." });
+    }
+
+    res.status(200).json({
+      message: "Project updated successfully",
+      project
+    });
+  } catch (error) {
+    console.error("Error updating project:", error);
+    res.status(500).json({ message: "Server error updating project" });
+  }
+};
+
+//=================delete project===============
+exports.deleteProject = async (req, res) => {
+  try {
+    const projectId = req.params.projectId;
+
+    const Epic = require("../models/Epic");
+    const UserStory = require("../models/UserStory");
+
+    // Delete cascading references
+    await UserStory.deleteMany({ project: projectId });
+    await Epic.deleteMany({ project: projectId });
+    await ProjectMembership.deleteMany({ project: projectId });
+
+    // Delete the project itself
+    const project = await Project.findByIdAndDelete(projectId);
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found." });
+    }
+
+    res.status(200).json({ message: "Project deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    res.status(500).json({ message: "Server error deleting project" });
+  }
+};

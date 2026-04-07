@@ -8,8 +8,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
-import { getMe, getUserProjects, createProject, joinProject } from '../services/api';
-import type { UserProfile, ProjectMembershipData } from '../services/api';
+import { getMe } from '../services/user.api';
+import { getUserProjects, createProject, joinProject } from '../services/project.api';
+import type { UserProfile } from '../services/user.api';
+import type { ProjectMembershipData } from '../services/project.api';
 import { Header } from '../components/Header/Header';
 import { ProjectCard } from '../components/ProjectCard/ProjectCard';
 import { Button } from '../components/ui/Button/Button';
@@ -53,7 +55,8 @@ const Dashboard: React.FC = () => {
 
 
   useEffect(() => {
-    if (!token) { navigate('/auth'); return; }
+    // Return early if token isn't loaded yet
+    if (!token) return;
 
     // Fetch the logged-in user's info
     getMe(token)
@@ -172,7 +175,13 @@ const Dashboard: React.FC = () => {
                 <ProjectCard 
                   key={membership._id} 
                   membership={membership} 
-                  onClick={() => navigate(`/project/${membership.project._id}`, { state: { project: membership.project, role: membership.role } })}
+                  onClick={() => {
+                    if (user && user.status !== "VERIFIED") {
+                      toast.error("Please verify your email to access this project");
+                    } else {
+                      navigate(`/project/${membership.project._id}`, { state: { project: membership.project, role: membership.role } });
+                    }
+                  }}
                 />
               ))
             )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ProjectMembershipData } from '../../services/api';
+import type { ProjectMembershipData } from '../../services/project.api';
 import styles from './ProjectCard.module.css';
 
 interface ProjectCardProps {
@@ -36,7 +36,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ membership, onClick })
                 <div className={styles.joinCodesContainer}>
                     <div className={styles.codeRow}>
                         <span>Scrum Master Code:</span>
-                        <code className={styles.codeOrange}>{membership.project.joinCodes.scrumMaster}</code>
+                        <code className={styles.codePurple}>{membership.project.joinCodes.scrumMaster}</code>
                     </div>
                     <div className={styles.codeRow}>
                         <span>Developer Code:</span>

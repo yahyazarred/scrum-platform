@@ -9,7 +9,7 @@ import {
 import { faEye, faEyeSlash, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { signup, login } from "../services/api";
+import { signup, login } from "../services/auth.api";
 import { useAuth } from "../context/AuthContext";  // ← added
 import "./auth.css";
 
