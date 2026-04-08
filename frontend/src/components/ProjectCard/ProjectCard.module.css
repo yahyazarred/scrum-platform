@@ -1,3 +1,7 @@
+/* 
+ * Project Card Container in the Dashboard
+ * The large rounded rectangle holding the dynamic Project information it grid format.
+ */
 .projectCard {
     background: var(--bg-dark);
     border: 1px solid var(--primary-blue-light);
@@ -14,24 +18,28 @@
     word-break: break-all;
 }
 
+/* Hovering over the Project Card makes it float up and glow blue */
 .projectCard:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    border-color: var(--primary-orange-border);
+    border-color: var(--primary-blue-border);
 }
 
+/* The top row inside the Card (holds Title on left, Github Logo on right) */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 }
 
+/* The Project Name */
 .title {
     color: #fff;
     font-size: 20px;
     font-weight: 600;
 }
 
+/* The Github icon button on the top right */
 .githubLink {
     color: var(--text-muted);
     transition: color 0.2s ease;
@@ -40,11 +48,11 @@
     justify-content: center;
     padding: 4px;
 }
-
 .githubLink:hover {
     color: #fff;
 }
 
+/* box containing the Project Goal */
 .projectGoal {
     background: var(--primary-blue-light);
     border-left: 3px solid var(--primary-blue);
@@ -53,11 +61,11 @@
     font-size: 14px;
     color: #e2e8f0;
 }
-
 .projectGoal strong {
     color: var(--primary-blue);
 }
 
+/* The standard paragraph text describing the project under the goal */
 .projectDesc {
     color: var(--text-muted);
     font-size: 14px;
@@ -65,6 +73,7 @@
     flex-grow: 1;
 }
 
+/* The bottom row inside the card where your Scrum Role is badged */
 .projectRole {
     margin-top: auto;
     padding-top: 15px;
@@ -74,6 +83,7 @@
     align-items: center;
 }
 
+/* The badge identifying your role */
 .roleBadge {
     display: inline-block;
     padding: 6px 14px;
@@ -83,25 +93,24 @@
     text-transform: capitalize;
 }
 
-/* Specific Role Colors */
+/* Specific Role Colors coloring the badge pill orange, purple, or blue depending on access level */
 .product_owner, .product_owner {
     background: var(--primary-orange-light);
     color: var(--primary-orange);
     border: 1px solid var(--primary-orange-border);
 }
-
 .scrum_master, .scrum_master {
     background: rgba(155, 89, 182, 0.15);
     color: #9b59b6;
     border: 1px solid rgba(155, 89, 182, 0.3);
 }
-
 .developer, .developer {
     background: var(--primary-blue-light);
     color: var(--primary-blue);
     border: 1px solid var(--primary-blue-border);
 }
 
+/* (ONLY FOR PRODUCT OWNERS) box showing the 6-digit codes to invite teammates */
 .joinCodesContainer {
     margin-top: 12px;
     padding: 12px;
@@ -113,17 +122,18 @@
     border: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
+/* The row inside the invite box containing the job title and the code */
 .codeRow {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
 }
-
 .codeRow span {
     color: var(--text-muted);
 }
 
+/* The actual 6-digit string e.g., AB12CD */
 .codeRow code {
     background: rgba(255, 255, 255, 0.05);
     padding: 4px 10px;
@@ -133,5 +143,6 @@
     letter-spacing: 1px;
 }
 
-.codeOrange { color: var(--primary-orange); }
+/* Hardcoded color variants for Developer Code vs Scrum Master Code */
+.codePurple { color: #ac0eeb; }
 .codeBlue { color: var(--primary-blue); }

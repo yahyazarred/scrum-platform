@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
+/* Global Colors and Themes */
 :root {
     --primary-orange: #ff6b35;
     --primary-orange-light: rgba(255, 107, 53, 0.15);
@@ -15,6 +16,7 @@
     --text-muted: #b0c4de;
 }
 
+/* Global Reset for all elements */
 * {
     margin: 0;
     padding: 0;
@@ -22,6 +24,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+/* Base Body structure (The global deep-space background) */
 body {
     background-image: url('./assets/projects\ background.png');
     background-repeat: no-repeat;
@@ -35,6 +38,7 @@ body {
     color: #ffffff;
 }
 
+/* The Root container that holds the entire React Application */
 #root {
     width: 100%;
     min-height: 100vh;
@@ -48,7 +52,7 @@ a {
     transition: all 0.3s ease;
 }
 
-/* Custom Scrollbar for better UX */
+/* Custom Browser Scrollbar (Overrides the default ugly scrollbar globally) */
 ::-webkit-scrollbar {
     width: 8px;
 }

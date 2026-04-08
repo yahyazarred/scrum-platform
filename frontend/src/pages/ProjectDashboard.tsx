@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header/Header';
-import { useAuth } from '../context/AuthContext';
+import ProductBacklog from '../components/Backlog/ProductBacklog';
+import ProjectDetails from '../components/ProjectDetails/ProjectDetails';
 import './ProjectDashboard.css';
 
 const ProjectDashboard: React.FC = () => {
-  const { projectId } = useParams<{ projectId: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  const { token } = useAuth();
+
   
   // Extract data passed invisibly from Dashboard's onClick router state.
-  // This cleverly prevents an immediate database re-fetch just to render the UI header strings.
+  // This prevents an immediate database re-fetch
   const [projectName] = useState<string>(location.state?.project?.name || "Project Details");
   const [userRole] = useState<string | null>(location.state?.role || null);
+  const [activeTab, setActiveTab] = useState<string>('details');
 
-  useEffect(() => {
-    // Basic auth check
-    if (!token) { navigate('/auth'); return; }
-      
-  }, [token, navigate, projectId]);
+
 
   return (
     <div className="project-dashboard-wrapper">
@@ -29,28 +26,51 @@ const ProjectDashboard: React.FC = () => {
           </button>
       </Header>
 
-      {/* Layout structurally drops 70px from the top via CSS margin-top to avoid being hidden under the fixed global Header */}
       <div className="project-layout-container">
         {/* Isolated left sidebar space. Future refactor: Move this to an isolated <Sidebar /> component once it scales in complexity */}
         <aside className="project-sidebar">
           <div className="sidebar-header">
             <h2 className="project-title">{projectName}</h2>
-            {/* Renders the precise Scrum Role dynamically extracted from the Dashboard routing state object */}
+            {/* Renders the precise Scrum Role dynamically extracted from the Dashboard when you click on a project */}
             {userRole && (
               <span className={`sidebar-role-badge ${userRole}`}>
                 {userRole.replace('_', ' ')}
               </span>
             )}
           </div>
-          {/* Empty sidebar for now */}
+          
+          <nav className="sidebar-nav">
+            <button 
+              className={`sidebar-tab ${activeTab === 'details' ? 'active' : ''}`}
+              onClick={() => setActiveTab('details')}
+            >
+              Project Details
+            </button>
+            <button 
+              className={`sidebar-tab ${activeTab === 'backlog' ? 'active' : ''}`}
+              onClick={() => setActiveTab('backlog')}
+            >
+              Product Backlog
+            </button>
+            <button 
+              className={`sidebar-tab ${activeTab === 'active sprint' ? 'active' : ''}`}
+              onClick={() => setActiveTab('active sprint')}
+            >
+              Active Sprint
+            </button>
+            {/* Future tabs will go here */}
+          </nav>
         </aside>
 
-        {/* The expansive canvas area meant for injecting Tabs/Board contents based on Project selection */}
         <main className="project-main-content">
-          {/* Empty main content for now */}
-          <div className="placeholder-content">
-            <p>Main project area</p>
-          </div>
+          {activeTab === 'details' && (
+            <ProjectDetails
+              projectId={location.pathname.split("/").pop() || ""}
+              role={userRole}
+              initialProject={location.state?.project || null}
+            />
+          )}
+          {activeTab === 'backlog' && <ProductBacklog role={userRole} />}
         </main>
       </div>
     </div>

@@ -1,3 +1,8 @@
+/* ========================================================
+   src/pages/Dashboard.css
+   Controls the global layout for the main homescreen
+   ======================================================== */
+
 .dashboard-wrapper {
     display: flex;
     flex-direction: column;
@@ -7,6 +12,7 @@
 
 /* ── Header actions (children of Header) ── */
 
+/* The pill button showing your name inside the top right of the Header */
 .profile-btn {
     display: flex;
     align-items: center;
@@ -30,10 +36,11 @@
     color: #ffffff;
 }
 
+/* The glowing orange circle with your initials inside the profile button */
 .profile-avatar {
     width: 34px;
     height: 34px;
-    border-radius: 50%;
+    border-radius: 50px;
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     display: flex;
     align-items: center;
@@ -51,6 +58,7 @@
     gap: 15px;
 }
 
+/* The red warning pill specifically showing "Unverified Account" in the header */
 .unverified-badge {
     background: rgba(255, 107, 53, 0.15);
     border: 1px solid rgba(255, 107, 53, 0.4);
@@ -72,6 +80,8 @@
 }
 
 /* ── Main content area ── */
+
+/* Container managing the area directly below the top sticky header */
 .dashboard-main {
     flex: 1;
     display: flex;
@@ -81,10 +91,9 @@
     padding-top: 110px; /* ← 70px header + 40px original top padding */
 }
 
-/* ── Main content area ── */
 .dashboard-content {
     width: 100%;
-    /* remove max-width to allow the content to stretch to the available screen space */
+    /* allow the content to stretch to the available screen space */
     max-width: none;
     padding: 0 20px;
     display: flex;
@@ -92,6 +101,7 @@
     gap: 30px;
 }
 
+/* The dark grey banner sitting above the project grid housing the "Create" and "Join" buttons */
 .dashboard-actions {
     display: flex;
     justify-content: space-between;
@@ -123,6 +133,7 @@
     gap: 25px;
 }
 
+/* The dashed placeholder box shown when the user has exactly 0 projects */
 .no-projects {
     grid-column: 1 / -1;
     text-align: center;
@@ -134,7 +145,9 @@
     border: 1px dashed rgba(255, 255, 255, 0.2);
 }
 
-/* ── Modals ── */
+/* ── Modals (Create / Join Modals) ── */
+
+/* The pitch black frosted blur isolating the popup modal from the dashboard background */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -146,6 +159,7 @@
     z-index: 999;
 }
 
+/* The physical popup box itself */
 .modal-content {
     background: #111824;
     border: 1px solid rgba(77, 184, 232, 0.3);
@@ -183,6 +197,7 @@
     margin-bottom: 0;
 }
 
+/* Wrapper handling a label + input pair inside the form */
 .input-group {
     display: flex;
     flex-direction: column;
@@ -262,7 +277,7 @@
     transform: none; /* override vertical centering for textareas */
 }
 
-/* ── UI Upgrades: Sprint Pills ── */
+/* ── UI Upgrades: Sprint Pills (Inside the modal layout) ── */
 .sprint-pills {
     display: flex;
     gap: 12px;
@@ -270,6 +285,7 @@
     height: 48px; /* Matches input height roughly */
 }
 
+/* The clickable options "1 Week", "2 Weeks", etc. */
 .sprint-pill {
     flex: 1;
     height: 100%;
@@ -315,7 +331,7 @@
     text-align: center;
 }
 
-/* Responsive Grid */
+/* Responsive Grid Adjustments for smaller Windows */
 @media (max-width: 992px) {
     .projects-grid {
         grid-template-columns: repeat(2, 1fr);

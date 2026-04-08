@@ -1,0 +1,885 @@
+/* ========================================================
+   src/components/Backlog/Backlog.css
+   Global styles for the Product Backlog, User Stories, and Epics
+   ======================================================== */
+
+/* The primary parent wrapper for the entire Backlog View */
+.backlog-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #ffffff;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* The upper div holding "Product Backlog" and the Manage Epics button */
+.backlog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--primary-blue-light);
+  padding-bottom: 1rem;
+}
+
+.backlog-header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ── The "Create Story" Container ── */
+
+/* The box fixed to the top where users add new stories */
+.create-section {
+  background: var(--bg-dark);
+  border: 1px solid var(--primary-blue-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.create-section:hover {
+  border-color: var(--primary-blue);
+  box-shadow: 0 8px 32px rgba(77, 184, 232, 0.15);
+}
+
+/* "create user story" text */
+.create-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+/* Container grouping text inputs logically */
+.form-group-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Dynamic styling for standard input fields */
+.form-group-row input[type="text"],
+.form-group-col input[type="text"],
+.form-group-row select {
+  flex: 1;
+  background: rgba(15, 22, 32, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-group-row input[type="text"]:focus,
+.form-group-col input[type="text"]:focus,
+.form-group-row select:focus,
+.form-group-col textarea:focus {
+  border-color: var(--primary-blue);
+  background: rgba(15, 22, 32, 0.8);
+  box-shadow: 0 0 0 2px var(--primary-blue-light);
+}
+
+.form-group-row select option {
+  background: #0f1620;
+  color: #ffffff;
+}
+
+.form-group-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Textarea handling the multi-line "As a user, I want to..." */
+.form-group-col textarea {
+  background: rgba(15, 22, 32, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  min-height: 100px;
+  resize: vertical;
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+/* Add nice scrollbar strictly for textareas */
+.form-group-col textarea::-webkit-scrollbar {
+  width: 6px;
+}
+.form-group-col textarea::-webkit-scrollbar-track {
+  background: rgba(15, 22, 32, 0.8);
+}
+.form-group-col textarea::-webkit-scrollbar-thumb {
+  background: rgba(77, 184, 232, 0.4);
+  border-radius: 3px;
+}
+
+/* Tiny color selection box used when declaring an epic */
+.color-picker {
+  width: 48px;
+  height: 44px;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 22, 32, 0.6);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+.color-picker:hover {
+  border-color: var(--primary-blue);
+}
+
+/* Small text listing "User Stories" and "Status" */
+.stories-list-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem 1rem 0.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+/* The vertical grid flexbox holding and spacing the stories apart */
+.story-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 100px;
+}
+
+/* ── Individual Story Card ── */
+
+/* The rectangular card representing one user story */
+.story-card-wrapper {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+/* When holding mouse over the card */
+.story-card-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(77, 184, 232, 0.4);
+  transform: translateX(4px);
+}
+
+/* (D&D Mechanics) Modifies the card heavily while actively clicked and being dragged across the screen */
+.story-card-wrapper.is-dragging {
+  background-color: #1e293b;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  z-index: 99999;
+  transform: scale(1.02);
+}
+
+.drag-handle:hover {
+  color: var(--primary-blue);
+  background: rgba(77, 184, 232, 0.1);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Middle area nesting the Title, Description, and Epic badges vertically */
+.story-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.story-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #ffffff;
+}
+
+/* Limits descriptions to a single line and cuts them off with an ellipsis (...) */
+.story-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 500px;
+}
+
+/* The actual "UI Feature" or "Backend" badges appended to stories */
+.epic-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #111;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Wraps the right-side elements (Priority # and Status selector box) */
+.story-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.priority-badge {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* Status Indicators via Left Border on the Story Card Wrapper */
+.status-todo { border-left: 10px solid #b0c4de; }
+.status-inprogress { border-left: 10px solid var(--primary-blue); }
+.status-done { border-left: 10px solid #10b981; }
+
+/* ── Epic Drawer (The Sliding Management Bar) ── */
+
+/* The entirely black transparent blur protecting the Dashboard background during use */
+.epic-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100000;
+  animation: fadeInOverlay 0.3s forwards;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* The actual physical gray drawer sliding from absolute right to 0 */
+.epic-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 90vw;
+  background: var(--bg-dark);
+  border-left: 1px solid var(--primary-blue-border);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s ease-out forwards;
+  padding: 1.5rem;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.epic-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--primary-blue-light);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.epic-drawer-header h3 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin: 0;
+}
+
+/* Vertical log of currently added Epic Colors */
+.epic-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.no-epics-msg {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* The singular item inside the list e.g., "• Backend Services" */
+.epic-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.epic-color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.epic-title-text {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* The Bottom-Section "Creation form" nested within the drawer */
+.drawer-create-section {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.drawer-create-section h4 {
+  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+/* The flexbox storing the selection of pre-made Epic Colors */
+.color-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem 0;
+}
+
+/* Each individual color dot button (Blue, Orange, Green, Purple) */
+.color-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.color-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Highlighting whichever color the user has clicked on to prep for Epic creation */
+.color-circle.selected {
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 3px var(--primary-blue-light);
+  transform: scale(1.15);
+}
+
+/* ── Epic Pill Selection within the 'Add Story' module ── */
+.epic-selection-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.epic-selection-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.epic-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.epic-pill {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.epic-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Dynamically glows with the color of the epic when clicked using React CSS Injection */
+.epic-pill.selected {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ── Alternative Status Radio Buttons ── */
+
+.status-radio-group {
+  display: flex;
+  gap: 0.25rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-radio-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.status-radio-label input[type="radio"] {
+  display: none;
+}
+
+.status-radio-label:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.status-radio-label.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ── Inline Edit Form & Action Buttons ── */
+
+.story-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.edit-inline-input,
+.edit-inline-textarea,
+.edit-inline-select {
+  background: rgba(15, 22, 32, 0.8);
+  border: 1px solid rgba(77, 184, 232, 0.3);
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+}
+
+.edit-inline-input:focus,
+.edit-inline-textarea:focus,
+.edit-inline-select:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 5px rgba(77, 184, 232, 0.4);
+}
+
+.edit-inline-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.edit-inline-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.inline-save-btn {
+  background: var(--primary-blue);
+  color: #0f1620;
+  border: none;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.inline-save-btn:hover {
+  background: #3baee1;
+  box-shadow: 0 0 10px rgba(77, 184, 232, 0.4);
+}
+
+.inline-cancel-btn {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.inline-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.story-actions-wrapper {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 12px;
+  margin-left: 4px;
+}
+
+.icon-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.icon-action-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.icon-action-btn.delete-btn:hover {
+  color: #ff3535;
+  background: rgba(255, 53, 53, 0.15);
+}
+
+/* ── Read-only Status Badge (for non-owners) ── */
+
+.status-readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.status-readonly-todo {
+  background: rgba(176, 196, 222, 0.12);
+  color: #b0c4de;
+  border-color: rgba(176, 196, 222, 0.25);
+}
+
+.status-readonly-inprogress {
+  background: rgba(77, 184, 232, 0.12);
+  color: var(--primary-blue);
+  border-color: rgba(77, 184, 232, 0.25);
+}
+
+.status-readonly-done {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+/* ── Edit Story Modal ── */
+
+.edit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 200000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.2s forwards;
+}
+
+.edit-modal {
+  background: #0f1620;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  width: 480px;
+  max-width: 92vw;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  animation: scaleIn 0.2s ease-out forwards;
+  overflow: hidden;
+}
+
+.edit-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.edit-modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.edit-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s, background 0.2s;
+}
+
+.edit-modal-close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.edit-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.5rem;
+}
+
+.edit-modal-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.edit-modal-input,
+.edit-modal-textarea,
+.edit-modal-select {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.edit-modal-input:focus,
+.edit-modal-textarea:focus,
+.edit-modal-select:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(77, 184, 232, 0.15);
+}
+
+.edit-modal-textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.edit-modal-select option {
+  background: #0f1620;
+}
+
+.edit-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.edit-modal-cancel {
+  flex: 1;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-modal-cancel:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.edit-modal-save {
+  flex: 2;
+  background: var(--primary-blue);
+  color: #0f1620;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-modal-save:hover {
+  background: #3baee1;
+  box-shadow: 0 0 14px rgba(77, 184, 232, 0.4);
+}
+
+/* ── Delete Confirmation Modal ── */
+
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 200000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.2s forwards;
+}
+
+.delete-modal {
+  background: #0f1620;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 380px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.delete-modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 53, 53, 0.12);
+  border: 1px solid rgba(255, 53, 53, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff3535;
+}
+
+.delete-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.delete-modal-body {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.delete-modal-body strong {
+  color: #ffffff;
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.delete-modal-cancel {
+  flex: 1;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-modal-cancel:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.delete-modal-confirm {
+  flex: 1;
+  background: var(--primary-orange);
+  color: #fff;
+  border: 1px solid rgba(255, 53, 53, 0.4);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-modal-confirm:hover {
+  box-shadow: 0 0 14px rgba(255, 53, 53, 0.4);
+}

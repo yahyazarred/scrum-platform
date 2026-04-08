@@ -1,3 +1,6 @@
+/* 
+ * The Main Global Header 
+ */
 .header {
     display: flex;
     align-items: center;
@@ -15,12 +18,14 @@
     z-index: 100;
 }
 
+/* Wrapper pushing the Logo and Title safely to the left */
 .logoContainer {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
+/* The invisible box containing the logo */
 .logoPlaceholder {
     width: 40px;
     height: 40px;
@@ -30,12 +35,14 @@
     margin-top: 13px;
 }
 
+/* image file for the Logo */
 .logoPlaceholder img {
     width: 160px;
     height: 160px;
     object-fit: contain;
 }
 
+/* The text "Scrumble" next to the logo in the header */
 .logoText {
     font-size: 20px;
     font-weight: 700;
@@ -43,10 +50,15 @@
     letter-spacing: 0.5px;
 }
 
+/* The "ble" in Scrumble colored blue */
 .logoText span {
     color: var(--primary-blue);
 }
 
+/* 
+ * The wrapper storing the items on the far Right of the Header
+ * For example: The Unverified Email Tag, Profile picture circle, etc.
+ */
 .rightSide {
     display: flex;
     align-items: center;

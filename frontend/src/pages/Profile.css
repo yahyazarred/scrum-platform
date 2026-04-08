@@ -1,10 +1,16 @@
+/* ========================================================
+   src/pages/Profile.css
+   Controls the User profile page (Email Verification, Name Editing, Logout)
+   ======================================================== */
+
 .profile-wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* ── Header (same as Dashboard) ── */
+/* ── Header ── */
+/* The top navigation bar specific to the Profile screen */
 .profile-header {
     display: flex;
     align-items: center;
@@ -48,6 +54,7 @@
     color: #4db8e8;
 }
 
+/* The backwards navigation button on the top right */
 .back-btn {
     display: flex;
     align-items: center;
@@ -70,7 +77,8 @@
     color: #ffffff;
 }
 
-/* ── Main ── */
+/* ── Main Area ── */
+/* Pushes the profile card down below the sticky header */
 .profile-main {
     flex: 1;
     display: flex;
@@ -79,7 +87,8 @@
     padding: 110px 20px 40px; 
 }
 
-/* ── Card ── */
+/* ── Profile Card ── */
+/* The glowing container holding all the user's data */
 .profile-card {
     background: linear-gradient(135deg, #1a2540 0%, #1e2a45 100%);
     border-radius: 30px;
@@ -98,6 +107,7 @@
 }
 
 /* ── Card top banner ── */
+/* The colored background art at the top of the profile card (like a twitter header) */
 .profile-banner {
     height: 100px;
     background: linear-gradient(135deg, #1e3a52 0%, #2d5a7b 50%, #3a6d8f 100%);
@@ -106,6 +116,7 @@
 }
 
 /* ── Avatar ── */
+/* The large circle intersecting the banner showing the user's initials */
 .profile-avatar-large {
     width: 90px;
     height: 90px;
@@ -126,6 +137,7 @@
 }
 
 /* ── Card body ── */
+/* The area holding the text strings and edit buttons below the banner */
 .profile-body {
     padding: 60px 40px 40px;
     display: flex;
@@ -141,6 +153,7 @@
     text-align: center;
 }
 
+/* The dynamic pill showing "AWAITING_EMAIL_VERIFICATION" or "VERIFIED" */
 .profile-status-badge {
     display: inline-flex;
     align-items: center;
@@ -154,6 +167,7 @@
     margin-top: 4px;
 }
 
+/* Hardcoded styles dynamically switching based on user verification state */
 .profile-status-badge.verified {
     background: rgba(52, 211, 153, 0.15);
     border: 1px solid rgba(52, 211, 153, 0.4);
@@ -174,6 +188,7 @@
 }
 
 /* ── Info rows ── */
+/* The list containing First Name, Last Name, and Email */
 .profile-info-section {
     width: 100%;
     margin-top: 24px;
@@ -229,6 +244,7 @@
 }
 
 /* ── Loading / Error states ── */
+/* The text shown before database lookup finishes */
 .profile-loading,
 .profile-error {
     text-align: center;
@@ -270,6 +286,7 @@
     object-fit: contain;
 }
 
+/* The red warning box shown if user needs to verify their email */
 .verify-banner {
   background: rgba(255, 50, 50, 0.08);
   border: 1px solid rgba(255, 50, 50, 0.35);
@@ -312,8 +329,8 @@
   cursor: not-allowed;
 }
 
-/* ── Add these to the bottom of Profile.css ── */
 
+/* Form input text fields that appear when clicking "Edit Profile" */
 .profile-edit-input {
   background: transparent;
   border: none;
@@ -330,6 +347,7 @@
   border-bottom-color: rgba(255, 255, 255, 0.8);
 }
 
+/* The "Edit Profile" button turning into a form mode */
 .edit-profile-btn {
   margin-top: 30px;
     width: 100%;
@@ -347,17 +365,13 @@
     box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
 }
 
-.logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
-}
-
 .edit-actions {
   display: flex;
   gap: 10px;
   margin-top: 20px;
 }
 
+/* The Blue "Save" button shown while editing */
 .save-btn {
   padding: 10px 24px;
   border: none;
@@ -373,6 +387,7 @@
 .save-btn:hover:not(:disabled) { opacity: 0.85; }
 .save-btn:disabled              { opacity: 0.5; cursor: not-allowed; }
 
+/* The clear "Cancel" button shown while editing */
 .cancel-btn {
   padding: 10px 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);

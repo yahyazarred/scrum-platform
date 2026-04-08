@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
-import { getMe, resendVerification, updateMe } from '../services/api';
+import { resendVerification } from '../services/auth.api';
+import { getMe, updateMe } from '../services/user.api';
 import logo from "../assets/ScrumbleLogo2.png";
-import type { UserProfile } from '../services/api';
+import type { UserProfile } from '../services/user.api';
 import './Profile.css';
 
 const Profile: React.FC = () => {
@@ -24,7 +25,8 @@ const Profile: React.FC = () => {
   const [editForm, setEditForm] = useState({ firstName: "", lastName: "", email: "" });
 
   useEffect(() => {
-    if (!token) { navigate('/auth'); return; }
+    // Return early if token isn't loaded yet
+    if (!token) return;
 
     getMe(token)
       .then(setUser)
@@ -62,7 +64,7 @@ const Profile: React.FC = () => {
   };
 
   const handleResendVerification = async () => {
-    if (!token) { navigate('/auth'); return; }
+    if (!token) return;
     setResending(true);
     try {
       const res = await resendVerification(token);

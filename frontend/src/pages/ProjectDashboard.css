@@ -1,5 +1,9 @@
-/* src/pages/ProjectDashboard.css */
+/* ========================================================
+   src/pages/ProjectDashboard.css
+   Controls the global layout inside a specific project
+   ======================================================== */
 
+/* The main container surrounding the entire inside-project view */
 .project-dashboard-wrapper {
     width: 100%;
     min-height: 100vh;
@@ -7,6 +11,7 @@
     flex-direction: column;
 }
 
+/* The button sitting raw in the Global Header sending you back to main home */
 .back-to-dashboard-btn {
     display: flex;
     align-items: center;
@@ -21,7 +26,6 @@
     font-size: 14px;
     font-weight: 500;
 }
-
 .back-to-dashboard-btn:hover {
     background: rgba(77, 184, 232, 0.18);
     border-color: #4db8e8;
@@ -29,6 +33,10 @@
     color: #ffffff;
 }
 
+/* 
+ * The horizontal layout underneath the header 
+ * Contains the Left Sidebar and Right Main Content
+ */
 .project-layout-container {
     display: flex;
     flex: 1;
@@ -38,6 +46,7 @@
     overflow: hidden; 
 }
 
+/* The sidebar */
 .project-sidebar {
     width: 260px;
     background-color: var(--bg-dark);
@@ -47,6 +56,7 @@
     padding: 24px 0;
 }
 
+/* The top box of the sidebar housing the Title and Job Role */
 .sidebar-header {
     padding: 0 20px 24px 20px;
     border-bottom: 1px solid var(--primary-blue-light);
@@ -56,6 +66,7 @@
     gap: 12px;
 }
 
+/* The pill showing if you are Product Owner, Scrum Master, or Developer */
 .sidebar-role-badge {
     display: inline-flex;
     align-items: center;
@@ -69,25 +80,24 @@
     width: fit-content;
 }
 
-/* Specific Role Colors mirrored from ProjectCard */
-.product_owner, .product_owner {
+/* Hardcoded colored variants for Job Titles (Mirrored from dashboard) */
+.product_owner {
     background: var(--primary-orange-light);
     color: var(--primary-orange);
     border: 1px solid var(--primary-orange-border);
 }
-
-.scrum_master, .scrum_master {
+.scrum_master {
     background: rgba(155, 89, 182, 0.15);
     color: #9b59b6;
     border: 1px solid rgba(155, 89, 182, 0.3);
 }
-
-.developer, .developer {
+.developer {
     background: var(--primary-blue-light);
     color: var(--primary-blue);
     border: 1px solid var(--primary-blue-border);
 }
 
+/* Project Name at the top of the sidebar */
 .project-title {
     color: #ffffff;
     font-size: 1.25rem;
@@ -96,6 +106,7 @@
     word-break: break-word;
 }
 
+/* The giant empty canvas to the right of the sidebar where the Backlog lives */
 .project-main-content {
     flex: 1;
     background-color: rgba(15, 22, 32, 0.4);
@@ -103,6 +114,7 @@
     overflow-y: auto;
 }
 
+/* An empty box drawn when you go to an empty tab */
 .placeholder-content {
     display: flex;
     justify-content: center;
@@ -113,4 +125,39 @@
     font-size: 1.1rem;
     border: 2px dashed rgba(255, 255, 255, 0.1);
     border-radius: 12px;
+}
+
+/* The vertical list of clickable tabs */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    gap: 5px;
+}
+
+/* Unselected tabs */
+.sidebar-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #8b9bb4);
+    text-align: left;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.sidebar-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+/* selected tab */
+.sidebar-tab.active {
+    background: rgba(77, 184, 232, 0.15);
+    color: #ffffff;
+    border-left: 3px solid var(--primary-blue);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
