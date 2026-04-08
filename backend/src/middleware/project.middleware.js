@@ -38,3 +38,20 @@ exports.verifyProjectMembership = async (req, res, next) => {
     res.status(500).json({ message: "Server error verifying project membership." });
   }
 };
+
+exports.requireRole = (requiredRole) => {
+  return (req, res, next) => {
+    // This middleware relies on verifyProjectMembership running first
+    if (!req.projectMembership) {
+      return res.status(500).json({ message: "Server configuration error: Membership not checked." });
+    }
+
+    if (req.projectMembership.role !== requiredRole) {
+      return res.status(403).json({ 
+        message: `Action not allowed. You must be a ${requiredRole.replace('_', ' ')} to perform this action.` 
+      });
+    }
+
+    next();
+  };
+};

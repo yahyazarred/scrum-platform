@@ -135,7 +135,7 @@
   Slightly larger, crisp white text specifically meant to draw the eye to the Project's overarching Goal.
 */
 .goal-text {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.5;
     color: var(--text-muted);
     font-weight: 500;
@@ -148,7 +148,7 @@
   The body-text styling for the standard project description. Muted color, standard reading size.
 */
 .desc-text {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.6;
     color: var(--text-muted);
     margin-bottom: 20px;

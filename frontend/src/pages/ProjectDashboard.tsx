@@ -52,6 +52,12 @@ const ProjectDashboard: React.FC = () => {
             >
               Product Backlog
             </button>
+            <button 
+              className={`sidebar-tab ${activeTab === 'active sprint' ? 'active' : ''}`}
+              onClick={() => setActiveTab('active sprint')}
+            >
+              Active Sprint
+            </button>
             {/* Future tabs will go here */}
           </nav>
         </aside>

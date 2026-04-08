@@ -210,7 +210,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
                 style={{ width: `${completionPercentage}%` }}
               ></div>
             </div>
-            <p className="progress-subtitle">user stories completed</p>
+            <p className="progress-subtitle">completed user stories</p>
           </div>
 
           <div className="details-card meta-card">

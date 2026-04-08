@@ -56,7 +56,6 @@ const CreateStoryForm: React.FC<CreateStoryFormProps> = ({ epics, onCreateStory 
             value={newStoryEpicId}
             onChange={(e) => setNewStoryEpicId(e.target.value)}
             className="create-story-select"
-            style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc', outline: 'none' }}
           >
             <option value="">No Epic</option>
             {epics.map(epic => (
