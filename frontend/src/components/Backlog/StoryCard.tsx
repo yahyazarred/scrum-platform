@@ -103,20 +103,10 @@ const StoryCard: React.FC<StoryCardProps> = ({ story, epics, role, onUpdateStory
               )}
               <span className="priority-badge">#{story.priority}</span>
 
-              <div className="status-radio-group">
-                {(["To Do", "In Progress", "Done"] as const).map((status) => (
-                  <label key={status} className={`status-radio-label ${story.status === status ? 'active' : ''}`}>
-                    <input
-                      type="radio"
-                      name={`status-${story._id}`}
-                      value={status}
-                      checked={story.status === status}
-                      disabled={role !== "product_owner"}
-                      onChange={(e) => onUpdateStory(story._id, { status: e.target.value as any })}
-                    />
-                    {status}
-                  </label>
-                ))}
+              <div className="story-status-display">
+                <span className={`status-readonly-badge status-readonly-${story.status.replace(" ", "").toLowerCase()}`}>
+                  {story.status}
+                </span>
               </div>
 
               {role === "product_owner" && (

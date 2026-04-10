@@ -24,6 +24,7 @@ export interface UserStoryData {
   epic: EpicData | null;
   priority: number;
   project: string;
+  sprint?: string;
 }
 
 export const createEpic = (token: string, projectId: string, data: { title: string; color?: string }) =>

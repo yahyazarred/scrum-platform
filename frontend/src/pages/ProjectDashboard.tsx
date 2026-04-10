@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header/Header';
 import ProductBacklog from '../components/Backlog/ProductBacklog';
 import ProjectDetails from '../components/ProjectDetails/ProjectDetails';
+import ActiveSprint from '../components/ActiveSprint/ActiveSprint';
 import './ProjectDashboard.css';
 
 const ProjectDashboard: React.FC = () => {
@@ -71,6 +72,7 @@ const ProjectDashboard: React.FC = () => {
             />
           )}
           {activeTab === 'backlog' && <ProductBacklog role={userRole} />}
+          {activeTab === 'active sprint' && <ActiveSprint role={userRole} />}
         </main>
       </div>
     </div>

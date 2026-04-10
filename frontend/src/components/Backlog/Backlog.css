@@ -291,7 +291,7 @@
 
 /* The actual physical gray drawer sliding from absolute right to 0 */
 .epic-drawer {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -304,6 +304,7 @@
   flex-direction: column;
   animation: slideInRight 0.3s ease-out forwards;
   padding: 1.5rem;
+  z-index: 100001;
 }
 
 @keyframes slideInRight {
