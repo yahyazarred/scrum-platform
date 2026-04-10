@@ -28,6 +28,10 @@ const userStorySchema = new mongoose.Schema({
     ref: "Project",
     required: true,
   },
+  sprint: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Sprint",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
