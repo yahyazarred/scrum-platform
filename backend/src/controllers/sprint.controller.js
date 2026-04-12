@@ -64,9 +64,13 @@ exports.startSprint = async (req, res) => {
     const startDate = new Date();
     const endDate = calculateEndDate(startDate, project.sprintDuration);
 
+    const sprintCount = await Sprint.countDocuments({ project: projectId });
+    const sprintNumber = sprintCount + 1;
+
     const sprint = new Sprint({
       project: projectId,
       goal,
+      sprintNumber,
       startDate,
       endDate,
       status: "Active"
@@ -85,5 +89,30 @@ exports.startSprint = async (req, res) => {
   } catch (error) {
     console.error("Error starting sprint:", error);
     res.status(500).json({ message: "Server error starting sprint" });
+  }
+};
+
+exports.endActiveSprint = async (req, res) => {
+  try {
+    const projectId = req.params.projectId;
+
+    const sprint = await Sprint.findOne({ project: projectId, status: "Active" });
+
+    if (!sprint) {
+      return res.status(404).json({ message: "No active sprint found" });
+    }
+
+    sprint.status = "Completed";
+    await sprint.save();
+
+    await UserStory.updateMany(
+      { sprint: sprint._id, status: { $in: ["To Do", "In Progress"] } },
+      { $set: { sprint: null, status: "To Do" } }
+    );
+
+    res.json({ message: "Sprint ended successfully and unresolved stories have been moved to the backlog." });
+  } catch (error) {
+    console.error("Error ending sprint prematurely:", error);
+    res.status(500).json({ message: "Server error ending sprint" });
   }
 };

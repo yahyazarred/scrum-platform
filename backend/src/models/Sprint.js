@@ -6,6 +6,9 @@ const sprintSchema = new mongoose.Schema({
     ref: "Project",
     required: true,
   },
+  sprintNumber: {
+    type: Number,
+  },
   goal: {
     type: String,
     required: true,

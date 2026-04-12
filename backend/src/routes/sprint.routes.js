@@ -9,5 +9,6 @@ router.use(protect);
 
 router.get("/active/:projectId", verifyProjectMembership, sprintController.getActiveSprint);
 router.post("/start/:projectId", verifyProjectMembership, requireRole("scrum_master"), sprintController.startSprint);
+router.post("/end/:projectId", verifyProjectMembership, requireRole("scrum_master"), sprintController.endActiveSprint);
 
 module.exports = router;
