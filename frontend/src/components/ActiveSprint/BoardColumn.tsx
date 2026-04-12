@@ -20,9 +20,10 @@ interface BoardColumnProps {
   id: string; // The exact string matching the status name (e.g., "To Do", "In Progress")
   title: string; // The text displayed at the top of the column for the user
   stories: UserStoryData[]; // The specific array of user stories belonging ONLY to this column
+  onCardClick: (story: UserStoryData) => void;
 }
 
-const BoardColumn: React.FC<BoardColumnProps> = ({ id, title, stories }) => {
+const BoardColumn: React.FC<BoardColumnProps> = ({ id, title, stories, onCardClick }) => {
   // ==========================================
   // DND-KIT DROPPABLE HOOK
   // ==========================================
@@ -72,7 +73,7 @@ const BoardColumn: React.FC<BoardColumnProps> = ({ id, title, stories }) => {
         >
           {/* Loop over every story injected into this column and render a physical draggable Card component for it */}
           {stories.map((story) => (
-            <BoardCard key={story._id} story={story} />
+            <BoardCard key={story._id} story={story} onClick={() => onCardClick(story)} />
           ))}
         </SortableContext>
       </div>

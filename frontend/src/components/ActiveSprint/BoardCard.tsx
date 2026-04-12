@@ -19,14 +19,16 @@ import type { UserStoryData } from "../../services/backlog.api";
 // Interface defining the exact data this tiny component needs to render itself
 interface BoardCardProps {
   story: UserStoryData; // Passing the entire story object so we can access title, ID, epic color, etc.
+  onClick?: () => void; // Optional click handler for opening the details modal
 }
 
-const BoardCard: React.FC<BoardCardProps> = ({ story }) => {
+const BoardCard: React.FC<BoardCardProps> = ({ story, onClick }) => {
   // ==========================================
   // DND-KIT PHYSICS HOOK
   // useSortable binds this React component to the drag-and-drop system.
   // ==========================================
   const {
+    attributes, // Accessibility attributes for the handle
     listeners,  // Mouse & Touch event listeners so we can actually pick it up
     setNodeRef, // Gives dnd-kit the physical dimensions of the element so it can calculate collisions
     transform,  // The mathematical X, Y distance the user has dragged the card from its origin
@@ -53,15 +55,28 @@ const BoardCard: React.FC<BoardCardProps> = ({ story }) => {
   return (
     <div
       ref={setNodeRef}
-      style={style}
-      // Spread the physics attributes so the browser knows we can drag this specific dom element
-      {...listeners}
+      style={{ ...style, cursor: 'pointer' }}
+      onClick={onClick}
       // CSS: .sprint-story-card is the main dark box with padding.
       // CSS: .is-dragging applies opacity and a blue border when actively held.
       className={`sprint-story-card ${statusClass} ${isDragging ? "is-dragging" : ""}`}
     >
-      {/* CSS: .sprint-story-title makes the user story text bold and white */}
-      <div className="sprint-story-title">{story.title}</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
+        {/* CSS: .sprint-story-title makes the user story text bold and white */}
+        <div className="sprint-story-title" style={{ flex: 1 }}>{story.title}</div>
+        
+        {/* Drag Handle: Isolated grab target to prevent conflicts with card clicking */}
+        <div 
+          {...attributes} 
+          {...listeners} 
+          className="sprint-drag-handle"
+          style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2px' }}
+        >
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+            <path d="M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z"></path>
+          </svg>
+        </div>
+      </div>
       
       {/* CSS: .sprint-story-meta aligns the bottom badges horizontally using flexbox */}
       <div className="sprint-story-meta">

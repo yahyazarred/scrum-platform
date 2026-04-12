@@ -59,6 +59,12 @@ const ProjectDashboard: React.FC = () => {
             >
               Active Sprint
             </button>
+            <button 
+              className={`sidebar-tab ${activeTab === 'sprint history' ? 'active' : ''}`}
+              onClick={() => setActiveTab('sprint history')}
+            >
+              Sprint History
+            </button>
             {/* Future tabs will go here */}
           </nav>
         </aside>
@@ -73,6 +79,7 @@ const ProjectDashboard: React.FC = () => {
           )}
           {activeTab === 'backlog' && <ProductBacklog role={userRole} />}
           {activeTab === 'active sprint' && <ActiveSprint role={userRole} />}
+          {activeTab === 'sprint history' }
         </main>
       </div>
     </div>

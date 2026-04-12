@@ -2,6 +2,7 @@ export interface SprintData {
   _id: string;
   project: string;
   goal: string;
+  sprintNumber?: number;
   startDate: string;
   endDate: string;
   status: "Active" | "Completed";
@@ -42,6 +43,23 @@ export const startSprint = async (
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.message || "Failed to start sprint");
+  }
+
+  return response.json();
+};
+
+export const endSprint = async (token: string, projectId: string): Promise<{ message: string }> => {
+  const response = await fetch(`${API_URL}/end/${projectId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to end sprint");
   }
 
   return response.json();

@@ -5,10 +5,10 @@
 // It uses `dnd-kit` to handle the complex physics and logic needed to drag 
 // a story card from one column and drop it into another.
 // ============================================================================
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { getUserStories, updateUserStory } from "../../services/backlog.api";
+import { updateUserStory } from "../../services/backlog.api";
 import type { UserStoryData } from "../../services/backlog.api";
 import {
   DndContext,
@@ -23,15 +23,17 @@ import {
 import { toast } from "react-toastify";
 import BoardColumn from "./BoardColumn";
 import BoardCard from "./BoardCard";
+import StoryDetailsModal from "./StoryDetailsModal";
 
 interface KanbanBoardProps {
-  sprintId: string;
+  stories: UserStoryData[];
+  setStories: React.Dispatch<React.SetStateAction<UserStoryData[]>>;
 }
 
 const COLUMNS = ["To Do", "In Progress", "Done"] as const;
 type Status = typeof COLUMNS[number];
 
-const KanbanBoard: React.FC<KanbanBoardProps> = ({ sprintId }) => {
+const KanbanBoard: React.FC<KanbanBoardProps> = ({ stories, setStories }) => {
   const { projectId } = useParams<{ projectId: string }>(); // Extract the project ID from the browser URL (e.g. /project/123/sprint)
   const { token } = useAuth(); // Grab the user's secure JWT token from the global context to authorize API calls
   
@@ -39,35 +41,12 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ sprintId }) => {
   // COMPONENT STATE
   // ==========================================
   
-  // State 1: `stories` holds all the user stories locked into this specific sprint.
-  // We initialize it as an empty array [] of UserStoryData objects.
-  const [stories, setStories] = useState<UserStoryData[]>([]);
-  
   // State 2: `activeCard` tracks which card is currently being clicked-and-dragged by the user's mouse.
   // It is null when the mouse is released, and holds the actual card data while dragging.
   const [activeCard, setActiveCard] = useState<UserStoryData | null>(null);
 
-  // ==========================================
-  // INITIAL DATA FETCH
-  // ==========================================
-  // useEffect fires once when this component loads, or if token/projectId/sprintId change.
-  useEffect(() => {
-    // If the user isn't logged in (no token) or the URL is broken (no projectId), abort immediately.
-    if (!token || !projectId) return;
-
-    // Call our backend API to get ALL stories for this project.
-    getUserStories(token, projectId)
-      .then(allStories => {
-        // Filter down to ONLY stories that belong to this specific active sprint
-        const sprintStories = allStories.filter(s => s.sprint === sprintId);
-        // Save those matching stories into our React state, triggering a re-render to display them
-        setStories(sprintStories);
-      })
-      .catch(err => {
-        console.error("Failed to load sprint stories", err);
-        toast.error("Failed to load sprint stories");
-      });
-  }, [token, projectId, sprintId]);
+  // State 3: Tracks which story card the user clicked to view full details
+  const [selectedStory, setSelectedStory] = useState<UserStoryData | null>(null);
 
   // ==========================================
   // DRAG & DROP SENSORS
@@ -186,6 +165,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ sprintId }) => {
             title={columnId}
             // Filter the master list of stories so each column only gets its own respective stories
             stories={stories.filter(s => s.status === columnId)}
+            onCardClick={setSelectedStory}
           />
         ))}
         
@@ -194,6 +174,13 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ sprintId }) => {
           {activeCard ? <BoardCard story={activeCard} /> : null}
         </DragOverlay>
       </DndContext>
+
+      {selectedStory && (
+        <StoryDetailsModal 
+          story={selectedStory} 
+          onClose={() => setSelectedStory(null)} 
+        />
+      )}
     </div>
   );
 };
