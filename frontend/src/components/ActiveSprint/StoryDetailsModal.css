@@ -20,6 +20,7 @@
     width: 90%;
     max-width: 800px; /* Big Modal size */
     min-height: 500px;
+    max-height: 90vh; /* Restrict height so it forces the inner flex body to scroll */
     display: flex;
     flex-direction: column;
     box-shadow: 0 15px 40px rgba(0,0,0,0.5);

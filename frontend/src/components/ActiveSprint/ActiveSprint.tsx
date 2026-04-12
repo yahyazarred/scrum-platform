@@ -124,7 +124,7 @@ const ActiveSprint: React.FC<ActiveSprintProps> = ({ role }) => {
             </div>
           </div>
 
-          <KanbanBoard stories={stories} setStories={setStories} />
+          <KanbanBoard stories={stories} setStories={setStories} role={role} />
 
           {isEndSprintModalOpen && (
             <div className="pd-modal-overlay">

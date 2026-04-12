@@ -48,6 +48,7 @@ const BoardCard: React.FC<BoardCardProps> = ({ story, onClick }) => {
   // Determine which visual status-indicator vertical line to draw on the far left side of the card.
   // We use ternary operators to check the raw string status and map it to a specific ActiveSprint.css class.
   const statusClass = 
+    story.isBlocked ? "status-indicator-blocked" :
     story.status === "Done" ? "status-indicator-done" : // Adds a green left border
     story.status === "In Progress" ? "status-indicator-inprogress" : // Adds a yellow/blue left border
     "status-indicator-todo"; // Defaults to a neutral gray left border if it's just To Do
@@ -59,11 +60,14 @@ const BoardCard: React.FC<BoardCardProps> = ({ story, onClick }) => {
       onClick={onClick}
       // CSS: .sprint-story-card is the main dark box with padding.
       // CSS: .is-dragging applies opacity and a blue border when actively held.
-      className={`sprint-story-card ${statusClass} ${isDragging ? "is-dragging" : ""}`}
+      className={`sprint-story-card ${statusClass} ${isDragging ? "is-dragging" : ""} ${story.isBlocked ? "is-blocked" : ""}`}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
         {/* CSS: .sprint-story-title makes the user story text bold and white */}
-        <div className="sprint-story-title" style={{ flex: 1 }}>{story.title}</div>
+        <div className="sprint-story-title" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {story.isBlocked && <span title="Blocked" style={{ fontSize: '14px' }}>⛔</span>}
+          {story.title}
+        </div>
         
         {/* Drag Handle: Isolated grab target to prevent conflicts with card clicking */}
         <div 

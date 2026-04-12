@@ -163,6 +163,11 @@
   border-color: var(--primary-blue);
 }
 
+.sprint-story-card.is-blocked {
+  border-color: rgba(239, 68, 68, 0.4);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
 .sprint-story-title {
   font-weight: 600;
   color: #fff;
@@ -177,7 +182,13 @@
 }
 
 .status-indicator-todo { border-left: 6px solid #b0c4de; }
-.status-indicator-inprogress { border-left: 6px solid var(--primary-blue); }
+.status-indicator-inprogress { border-left: 4px solid var(--text-muted); }
+
+.status-indicator-blocked {
+  border-left: 4px solid #ef4444;
+}
+
+/* Modal styling for editing a task */
 .status-indicator-done { border-left: 6px solid #10b981; }
 
 .kanban-epic-badge {

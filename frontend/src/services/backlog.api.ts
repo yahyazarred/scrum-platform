@@ -25,6 +25,7 @@ export interface UserStoryData {
   priority: number;
   project: string;
   sprint?: string;
+  isBlocked?: boolean;
 }
 
 export const createEpic = (token: string, projectId: string, data: { title: string; color?: string }) =>

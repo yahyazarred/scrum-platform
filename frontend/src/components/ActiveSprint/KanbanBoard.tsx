@@ -28,12 +28,13 @@ import StoryDetailsModal from "./StoryDetailsModal";
 interface KanbanBoardProps {
   stories: UserStoryData[];
   setStories: React.Dispatch<React.SetStateAction<UserStoryData[]>>;
+  role: string | null;
 }
 
 const COLUMNS = ["To Do", "In Progress", "Done"] as const;
 type Status = typeof COLUMNS[number];
 
-const KanbanBoard: React.FC<KanbanBoardProps> = ({ stories, setStories }) => {
+const KanbanBoard: React.FC<KanbanBoardProps> = ({ stories, setStories, role }) => {
   const { projectId } = useParams<{ projectId: string }>(); // Extract the project ID from the browser URL (e.g. /project/123/sprint)
   const { token } = useAuth(); // Grab the user's secure JWT token from the global context to authorize API calls
   
@@ -179,6 +180,11 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ stories, setStories }) => {
         <StoryDetailsModal 
           story={selectedStory} 
           onClose={() => setSelectedStory(null)} 
+          role={role}
+          onUpdateStory={(updatedStory) => {
+            setSelectedStory(updatedStory);
+            setStories(prev => prev.map(s => s._id === updatedStory._id ? updatedStory : s));
+          }}
         />
       )}
     </div>
