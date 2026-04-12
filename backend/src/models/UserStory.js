@@ -32,6 +32,10 @@ const userStorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Sprint",
   },
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
