@@ -32,4 +32,9 @@ router.delete("/:projectId", verifyProjectMembership, requireRole("product_owner
 // Join a project via join code
 router.post("/join", projectController.joinProject);
 
+// Members logic
+router.get("/:projectId/members", verifyProjectMembership, projectController.getProjectMembers);
+router.delete("/:projectId/members/leave", verifyProjectMembership, projectController.leaveProject);
+router.delete("/:projectId/members/:memberId", verifyProjectMembership, requireRole("product_owner"), projectController.kickMember);
+
 module.exports = router;

@@ -218,3 +218,64 @@ exports.deleteProject = async (req, res) => {
     res.status(500).json({ message: "Server error deleting project" });
   }
 };
+
+//=================get project members==========
+exports.getProjectMembers = async (req, res) => {
+  try {
+    const projectId = req.params.projectId;
+    const memberships = await ProjectMembership.find({ project: projectId }).populate("user", "firstName lastName email").lean();
+    res.status(200).json(memberships);
+  } catch (error) {
+    console.error("Error fetching project members:", error);
+    res.status(500).json({ message: "Server error fetching project members" });
+  }
+};
+
+//=================leave project================
+exports.leaveProject = async (req, res) => {
+  try {
+    const projectId = req.params.projectId;
+    const userId = req.user.userId;
+
+    const membership = await ProjectMembership.findOne({ project: projectId, user: userId });
+    if (!membership) return res.status(404).json({ message: "Membership not found" });
+    if (membership.role === "product_owner") {
+      return res.status(403).json({ message: "Product Owners cannot leave the project." });
+    }
+
+    await ProjectMembership.findByIdAndDelete(membership._id);
+
+    // Completely wipe their assignment references across the board
+    const SubTask = require("../models/SubTask");
+    await SubTask.updateMany({ project: projectId, assignedTo: userId }, { assignedTo: null });
+
+    res.status(200).json({ message: "Successfully left the project" });
+  } catch (error) {
+    console.error("Error leaving project:", error);
+    res.status(500).json({ message: "Server error leaving project" });
+  }
+};
+
+//=================kick member==================
+exports.kickMember = async (req, res) => {
+  try {
+    const { projectId, memberId } = req.params;
+
+    const targetMembership = await ProjectMembership.findOne({ project: projectId, user: memberId });
+    if (!targetMembership) return res.status(404).json({ message: "Member not found" });
+
+    if (targetMembership.role === "product_owner") {
+      return res.status(403).json({ message: "Cannot kick the Product Owner." });
+    }
+
+    await ProjectMembership.findByIdAndDelete(targetMembership._id);
+
+    const SubTask = require("../models/SubTask");
+    await SubTask.updateMany({ project: projectId, assignedTo: memberId }, { assignedTo: null });
+
+    res.status(200).json({ message: "Member kicked successfully" });
+  } catch (error) {
+    console.error("Error kicking member:", error);
+    res.status(500).json({ message: "Server error kicking member" });
+  }
+};

@@ -35,6 +35,9 @@ app.use("/api/projects/:projectId/backlog", backlogRoutes);
 const blockerRoutes = require("./routes/blocker.routes");
 app.use("/api/projects/:projectId/stories/:storyId/blockers", blockerRoutes);
 
+const subTaskRoutes = require("./routes/subtask.routes");
+app.use("/api/projects/:projectId/stories/:storyId/subtasks", subTaskRoutes);
+
 const sprintRoutes = require("./routes/sprint.routes");
 app.use("/api/sprints", sprintRoutes);
 

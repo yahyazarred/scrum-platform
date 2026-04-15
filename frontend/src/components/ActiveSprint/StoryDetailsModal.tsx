@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import type { UserStoryData } from "../../services/backlog.api";
 import { getBlockers, createBlocker, solveBlocker } from "../../services/blocker.api";
 import type { BlockerData } from "../../services/blocker.api";
+import { getSubTasks, createSubTask, claimSubTask, giveUpSubTask, toggleFinished, deleteSubTask } from "../../services/subtask.api";
+import type { SubTaskData } from "../../services/subtask.api";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import { Button } from "../ui/Button/Button";
@@ -25,6 +27,24 @@ const StoryDetailsModal: React.FC<StoryDetailsModalProps> = ({ story, onClose, r
   const [solvingBlockerId, setSolvingBlockerId] = useState<string | null>(null);
   const [resolutionText, setResolutionText] = useState("");
 
+  // Sub-task States
+  const [tasks, setTasks] = useState<SubTaskData[]>([]);
+  const [isTasksLoading, setIsTasksLoading] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskDescription, setNewTaskDescription] = useState("");
+
+  // Gets the currently logged in user ID so we can evaluate assignations
+  const getUserIdFromToken = () => {
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.userId;
+    } catch {
+      return null;
+    }
+  };
+  const currentUserId = getUserIdFromToken();
+
   const fetchBlockers = async () => {
     if (!token) return;
     setIsBlockersLoading(true);
@@ -38,9 +58,23 @@ const StoryDetailsModal: React.FC<StoryDetailsModalProps> = ({ story, onClose, r
     }
   };
 
-  // Fetch blockers when the component opens so we have the data ready if they switch to the tab
+  const fetchTasks = async () => {
+    if (!token) return;
+    setIsTasksLoading(true);
+    try {
+      const data = await getSubTasks(token, story.project, story._id);
+      setTasks(data);
+    } catch (err) {
+      console.error("Failed to load tasks", err);
+    } finally {
+      setIsTasksLoading(false);
+    }
+  };
+
+  // Fetch blockers and tasks when the component opens so we have the data ready if they switch to the tab
   useEffect(() => {
     fetchBlockers();
+    fetchTasks();
   }, [story._id]);
 
   const handleCreateBlocker = async (e: React.FormEvent) => {
@@ -79,6 +113,65 @@ const StoryDetailsModal: React.FC<StoryDetailsModalProps> = ({ story, onClose, r
       }
     } catch (err: any) {
       toast.error(err.message || "Failed to solve blocker");
+    }
+  };
+
+  // Sub-Task Action Handlers
+  const handleCreateTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token || !newTaskTitle.trim()) return;
+    try {
+      const newTask = await createSubTask(token, story.project, story._id, newTaskTitle, newTaskDescription);
+      setTasks(prev => [newTask, ...prev]);
+      setNewTaskTitle("");
+      setNewTaskDescription("");
+      toast.success("Sub-task created! It has been automatically assigned to you.");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to create task");
+    }
+  };
+
+  const handleClaimTask = async (taskId: string) => {
+    if (!token) return;
+    try {
+      const claimedTask = await claimSubTask(token, story.project, story._id, taskId);
+      setTasks(prev => prev.map(t => t._id === taskId ? claimedTask : t));
+      toast.success("Task claimed");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to claim task");
+    }
+  };
+
+  const handleGiveUpTask = async (taskId: string) => {
+    if (!token) return;
+    try {
+      // API successfully unassigned, the task payload unfortunately sets populated assignedTo to null directly
+      await giveUpSubTask(token, story.project, story._id, taskId);
+      setTasks(prev => prev.map(t => t._id === taskId ? { ...t, assignedTo: null } : t));
+      toast.info("You dropped the task assignment");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to give up task");
+    }
+  };
+
+  const handleToggleTask = async (taskId: string) => {
+    if (!token) return;
+    try {
+      const toggledTask = await toggleFinished(token, story.project, story._id, taskId);
+      setTasks(prev => prev.map(t => t._id === taskId ? toggledTask : t));
+    } catch (err: any) {
+      toast.error(err.message || "Failed to finish task");
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    if (!token) return;
+    try {
+      await deleteSubTask(token, story.project, story._id, taskId);
+      setTasks(prev => prev.filter(t => t._id !== taskId));
+      toast.success("Task deleted");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete task");
     }
   };
 
@@ -155,8 +248,127 @@ const StoryDetailsModal: React.FC<StoryDetailsModalProps> = ({ story, onClose, r
           )}
 
           {activeTab === "subtasks" && (
-            <div className="sd-placeholder">
-              <p>No sub-tasks defined yet.</p>
+            <div className="sd-subtasks-container" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              
+              {/* Form to create a new sub-task (Developers Only) */}
+              {role === "developer" && (
+                <form onSubmit={handleCreateTask} style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <h4 style={{ color: '#fff', margin: '0 0 10px 0', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>➕ Create Sub-Task</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="Task Headline..."
+                      value={newTaskTitle}
+                      onChange={(e) => setNewTaskTitle(e.target.value)}
+                      style={{ padding: '10px 14px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)', color: '#fff' }}
+                    />
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <input 
+                        type="text" 
+                        placeholder="Opitonal short description..."
+                        value={newTaskDescription}
+                        onChange={(e) => setNewTaskDescription(e.target.value)}
+                        style={{ flex: 1, padding: '10px 14px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)', color: '#fff' }}
+                      />
+                      <Button type="submit" disabled={!newTaskTitle.trim()}>Create</Button>
+                    </div>
+                  </div>
+                </form>
+              )}
+
+              {/* List of Tasks */}
+              <div className="sd-tasks-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {isTasksLoading ? (
+                  <p style={{ color: 'var(--text-muted)' }}>Loading tasks...</p>
+                ) : tasks.length === 0 ? (
+                  <div className="sd-placeholder">
+                    <p>No sub-tasks defined.</p>
+                  </div>
+                ) : (
+                  tasks.map(task => (
+                    <div key={task._id} style={{ 
+                      display: 'flex', 
+                      gap: '16px',
+                      background: 'rgba(255, 255, 255, 0.03)', 
+                      border: `1px solid ${
+                        task.status === 'finished' ? 'rgba(16, 185, 129, 0.4)' : // Green when finished
+                        !task.assignedTo ? 'rgba(249, 115, 22, 0.4)' :           // Orange when unassigned
+                        'rgba(77, 184, 232, 0.4)'                                // Blue when claimed
+                      }`,
+                      padding: '16px 20px', 
+                      borderRadius: '10px',
+                      opacity: task.status === 'finished' ? 0.7 : 1,
+                      transition: 'all 0.2s ease',
+                      position: 'relative'
+                    }}>
+                      
+                      {/* Interactive finished checkbox wrapper - only interactable if claimed by current user */}
+                      <div style={{ display: 'flex', alignItems: 'flex-start', paddingTop: '2px' }}>
+                        <button 
+                          disabled={task.assignedTo?._id !== currentUserId}
+                          onClick={() => handleToggleTask(task._id)}
+                          style={{
+                            width: '24px', height: '24px', borderRadius: '50%',
+                            border: `2px solid ${task.status === 'finished' ? '#10b981' : 'var(--text-muted)'}`,
+                            background: task.status === 'finished' ? '#10b981' : 'transparent',
+                            color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            cursor: task.assignedTo?._id === currentUserId ? 'pointer' : 'not-allowed',
+                            opacity: task.assignedTo?._id === currentUserId ? 1 : 0.5
+                          }}
+                        >
+                          {task.status === 'finished' && '✓'}
+                        </button>
+                      </div>
+
+                      {/* Content Area */}
+                      <div style={{ flex: 1 }}>
+                        <h4 style={{ margin: '0 0 4px 0', color: '#fff', fontSize: '15px', textDecoration: task.status === 'finished' ? 'line-through' : 'none' }}>
+                          {task.title}
+                        </h4>
+                        {task.description && (
+                           <p style={{ margin: '0 0 12px 0', color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.5' }}>{task.description}</p>
+                        )}
+                        
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: 'auto' }}>
+                          <span style={{ fontSize: '12px', backgroundColor: !task.assignedTo ? 'rgba(249, 115, 22, 0.1)' : 'rgba(77, 184, 232, 0.1)', padding: '4px 10px', borderRadius: '12px', color: !task.assignedTo ? '#f97316' : 'var(--primary-blue)', fontWeight: 600 }}>
+                            {task.assignedTo ? `Assigned: ${task.assignedTo.firstName} ${task.assignedTo.lastName}` : "Unassigned"}
+                          </span>
+
+                          {/* Assignment UI Buttons */}
+                          {task.status !== 'finished' && role === "developer" && (
+                            <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
+                              {!task.assignedTo ? (
+                                <button onClick={() => handleClaimTask(task._id)} style={{ background: 'rgba(77, 184, 232, 0.1)', border: '1px solid var(--primary-blue)', color: 'var(--primary-blue)', padding: '6px 14px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, transition: 'all 0.2s' }}>
+                                  Claim Task
+                                </button>
+                              ) : task.assignedTo._id === currentUserId ? (
+                                <button onClick={() => handleGiveUpTask(task._id)} style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', color: '#ef4444', padding: '6px 14px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, transition: 'all 0.2s' }}>
+                                  Drop Task
+                                </button>
+                              ) : null}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Developer Options */}
+                      {role === "developer" && (
+                         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                           <button onClick={() => handleDeleteTask(task._id)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }} title="Delete task">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                              </svg>
+                           </button>
+                         </div>
+                      )}
+
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           )}
 

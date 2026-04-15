@@ -9,8 +9,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
-import { getProjectById, updateProject, deleteProject } from '../../services/project.api';
-import type { ProjectData } from '../../services/project.api';
+import { getProjectById, updateProject, deleteProject, getProjectMembers, leaveProject, kickMember } from '../../services/project.api';
+import type { ProjectData, ProjectMemberData } from '../../services/project.api';
 import { getUserStories } from '../../services/backlog.api';
 import type { UserStoryData } from '../../services/backlog.api';
 import { Button } from '../ui/Button/Button';
@@ -38,9 +38,10 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
   const [project, setProject] = useState<ProjectData | null>(initialProject);
   
   // stories: An array containing every UserStory associated with the current project.
-  // This is completely re-fetched on mount, guaranteeing we have the exact live amount of
-  // 'Done' tickets directly mapped into the Completion Percentage progress bar without delays.
   const [stories, setStories] = useState<UserStoryData[]>([]);
+
+  // members: Used to display the exact team composition directly within this tab.
+  const [members, setMembers] = useState<ProjectMemberData[]>([]);
   
   // loading: UI flag that protects the page from rendering undefined JSX elements.
   const [loading, setLoading] = useState<boolean>(!initialProject);
@@ -49,6 +50,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
   // Simple boolean toggles that dictate whether the "Edit" or "Delete" modal overlay is active.
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+  const [kickTarget, setKickTarget] = useState<{ id: string; name: string } | null>(null);
   
   // --- Edit Form State ---
   // These discrete string states track the text inputs inside the Edit Modal form.
@@ -76,8 +79,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
           setProject(p);
         }
         // Always fetch stories so we have an accurate progress bar
-        const s = await getUserStories(token, projectId);
+        const [s, m] = await Promise.all([
+           getUserStories(token, projectId),
+           getProjectMembers(token, projectId)
+        ]);
         setStories(s);
+        setMembers(m);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load project details.");
@@ -116,6 +123,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
   const completionPercentage = totalStories === 0 ? 0 : Math.round((doneStories / totalStories) * 100);
 
   // --- Handlers ---
+  
+  const roleOrder = { product_owner: 0, scrum_master: 1, developer: 2 };
+  const sortedMembers = [...members].sort((a, b) => roleOrder[a.role] - roleOrder[b.role]);
 
   // Submits the updated project fields to the backend
   const handleEditProject = async (e: React.FormEvent) => {
@@ -150,6 +160,32 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
     }
   };
 
+  const confirmLeaveProject = async () => {
+    if (!token) return;
+    try {
+      await leaveProject(token, projectId);
+      toast.success("You successfully left the project");
+      navigate('/dashboard');
+    } catch (err: any) {
+      toast.error(err.message || "Failed to leave project");
+    } finally {
+      setIsLeaveModalOpen(false);
+    }
+  };
+
+  const confirmKickMember = async () => {
+    if (!token || !kickTarget) return;
+    try {
+      await kickMember(token, projectId, kickTarget.id);
+      setMembers(prev => prev.filter(m => m.user._id !== kickTarget.id));
+      toast.success(`${kickTarget.name} removed from project.`);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to kick member");
+    } finally {
+      setKickTarget(null);
+    }
+  };
+
   return (
     <div className="project-details-container">
       
@@ -167,12 +203,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
 
         {/* ACCESS CONTROL GATE: 
             This dynamically hides the Delete & Edit capabilities exclusively to Product Owners.
-            Note: The backend also double-checks this during the resulting API request using middleware! 
         */}
-        {role === "product_owner" && (
+        {role === "product_owner" ? (
           <div className="details-actions">
             <Button variant="secondary" onClick={() => setIsEditModalOpen(true)}>Edit Project</Button>
             <button className="btn-danger" onClick={() => setIsDeleteModalOpen(true)}>Delete Project</button>
+          </div>
+        ) : (
+          <div className="details-actions">
+            <button className="btn-danger" onClick={() => setIsLeaveModalOpen(true)}>Leave Project</button>
           </div>
         )}
       </div>
@@ -241,6 +280,40 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
                </div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* 
+        SECTION 3: Team Members
+      */}
+      <div className="team-members-section">
+        <h2 className="team-members-title">Team Members</h2>
+        <div className="members-list">
+          {sortedMembers.map((member) => (
+            <div key={member._id} className="member-row">
+              <div className="member-info">
+                <div className="member-avatar">
+                  {member.user.firstName.charAt(0)}{member.user.lastName.charAt(0)}
+                </div>
+                <div className="member-details">
+                  <span className="member-name">{member.user.firstName} {member.user.lastName}</span>
+                  <span className="member-email">{member.user.email}</span>
+                </div>
+              </div>
+              
+              <div className="member-role-badge">
+                <span className={`role-pill ${member.role === 'product_owner' ? 'role-po' : member.role === 'scrum_master' ? 'role-sm' : 'role-dev'}`}>
+                  {member.role.replace('_', ' ')}
+                </span>
+                
+                {role === "product_owner" && member.role !== "product_owner" && (
+                  <button onClick={() => setKickTarget({ id: member.user._id, name: member.user.firstName })} className="btn-kick" title="Kick Member">
+                    Kick
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -322,6 +395,32 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
             <div className="pd-modal-actions">
               <Button type="button" variant="ghost" onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
               <button className="btn-danger" onClick={handleDeleteProject}>Yes, Delete Project</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isLeaveModalOpen && (
+        <div className="pd-modal-overlay">
+          <div className="pd-modal-content delete-modal">
+            <h3>Leave Project</h3>
+            <p>Are you sure you want to leave <strong>{project.name}</strong>? You will be removed from all your assigned sub-tasks simultaneously.</p>
+            <div className="pd-modal-actions">
+              <Button type="button" variant="ghost" onClick={() => setIsLeaveModalOpen(false)}>Cancel</Button>
+              <button className="btn-danger" onClick={confirmLeaveProject}>Yes, Leave Project</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {kickTarget && (
+        <div className="pd-modal-overlay">
+          <div className="pd-modal-content delete-modal">
+            <h3>Kick Team Member</h3>
+            <p>Are you sure you want to violently remove <strong>{kickTarget.name}</strong> from this project? They will be automatically un-assigned from all active sprints.</p>
+            <div className="pd-modal-actions">
+              <Button type="button" variant="ghost" onClick={() => setKickTarget(null)}>Cancel</Button>
+              <button className="btn-danger" onClick={confirmKickMember}>Yes, Kick Member</button>
             </div>
           </div>
         </div>

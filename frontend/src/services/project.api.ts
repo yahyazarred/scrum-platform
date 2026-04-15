@@ -21,6 +21,18 @@ export interface ProjectData {
   createdAt: string;
 }
 
+export interface ProjectMemberData {
+  _id: string;
+  user: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  project: string;
+  role: "product_owner" | "scrum_master" | "developer";
+}
+
 export interface ProjectMembershipData {
   _id: string;
   user: string;
@@ -40,8 +52,37 @@ export const joinProject = (token: string, data: { joinCode: string }) =>
 export const getProjectById = (token: string, projectId: string) =>
   request<ProjectData>(`/projects/${projectId}`, { token });
 
-export const updateProject = (token: string, projectId: string, data: Partial<ProjectData>) =>
-  request<{ message: string; project: ProjectData }>(`/projects/${projectId}`, { method: "PUT", body: data, token });
+export const updateProject = (token: string, projectId: string, updates: Partial<ProjectData>) => {
+  return request<{ message: string; project: ProjectData }>(`/projects/${projectId}`, {
+    method: "PUT",
+    body: updates,
+    token,
+  });
+};
 
-export const deleteProject = (token: string, projectId: string) =>
-  request<{ message: string }>(`/projects/${projectId}`, { method: "DELETE", token });
+export const deleteProject = async (token: string, projectId: string) => {
+  return request<{ message: string }>(`/projects/${projectId}`, {
+    method: "DELETE",
+    token,
+  });
+};
+
+// --- Members API ---
+
+export const getProjectMembers = async (token: string, projectId: string) => {
+  return request<ProjectMemberData[]>(`/projects/${projectId}/members`, { token });
+};
+
+export const leaveProject = async (token: string, projectId: string) => {
+  return request<{ message: string }>(`/projects/${projectId}/members/leave`, {
+    method: "DELETE",
+    token,
+  });
+};
+
+export const kickMember = async (token: string, projectId: string, memberId: string) => {
+  return request<{ message: string }>(`/projects/${projectId}/members/${memberId}`, {
+    method: "DELETE",
+    token,
+  });
+};
