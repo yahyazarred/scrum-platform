@@ -1,5 +1,4 @@
 // ============================================================
-// What is this file?
 //   Sets up the Express app — middleware, routes, and exports it.
 //   Does NOT start the server (that's server.js's job).
 //
@@ -24,7 +23,7 @@ const authRoutes = require("./routes/auth.routes");
 app.use("/api/auth", authRoutes); 
 
 const userRoutes = require("./routes/user.routes");
-app.use("/api/user", userRoutes);  
+app.use("/api/users", userRoutes);  
 
 const projectRoutes = require("./routes/project.routes");
 app.use("/api/projects", projectRoutes);
@@ -39,9 +38,9 @@ const subTaskRoutes = require("./routes/subtask.routes");
 app.use("/api/projects/:projectId/stories/:storyId/subtasks", subTaskRoutes);
 
 const sprintRoutes = require("./routes/sprint.routes");
-app.use("/api/sprints", sprintRoutes);
+app.use("/api/projects/:projectId/sprints", sprintRoutes);
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({ message: "Scrumble API running" });
 });
 

@@ -1,19 +1,15 @@
-// ============================================================
-// what is thi file?
-//
-// ============================================================
-
 const User = require("../models/User");
 const EmailVerification = require("../models/EmailVerification");
 const sendVerificationEmail = require("../utils/mailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// function that creates a token
 const signToken = (user) =>
   jwt.sign(
     {
-      userId:    user._id,
-      status:    user.status,
+      userId: user._id,
+      status: user.status,
     },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
@@ -65,8 +61,9 @@ exports.verifyEmail = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
-
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     user.status = "VERIFIED";
     await user.save();
 
@@ -90,11 +87,13 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid email or password" });
-
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
-
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
     const token = signToken(user);
 
     res.json({ message: "Login successful", token });

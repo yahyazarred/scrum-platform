@@ -1,5 +1,6 @@
 const SubTask = require("../models/SubTask");
 
+//======= get sub-tasks =======
 exports.getSubTasks = async (req, res) => {
   try {
     const { projectId, storyId } = req.params;
@@ -14,6 +15,7 @@ exports.getSubTasks = async (req, res) => {
   }
 };
 
+//======= create a sub-task =======
 exports.createSubTask = async (req, res) => {
   try {
     const { projectId, storyId } = req.params;
@@ -23,7 +25,7 @@ exports.createSubTask = async (req, res) => {
       return res.status(400).json({ message: "Title is required" });
     }
 
-    const task = new SubTask({
+    const task = await SubTask.create({
       project: projectId,
       userStory: storyId,
       createdBy: req.user.userId,
@@ -33,7 +35,6 @@ exports.createSubTask = async (req, res) => {
       status: "todo"
     });
 
-    await task.save();
     await task.populate({ path: "assignedTo", select: "firstName lastName" });
 
     res.status(201).json(task);
@@ -43,6 +44,7 @@ exports.createSubTask = async (req, res) => {
   }
 };
 
+//======= give up a sub-task =======
 exports.giveUpSubTask = async (req, res) => {
   try {
     const { projectId, storyId, taskId } = req.params;
@@ -57,13 +59,14 @@ exports.giveUpSubTask = async (req, res) => {
     task.assignedTo = null;
     await task.save();
 
-    res.json(task); // no need to wait populate since it's null
+    res.json(task); 
   } catch (error) {
     console.error("Failed to give up sub-task:", error);
     res.status(500).json({ message: "Server error unassigning task" });
   }
 };
 
+//======= claim a sub-task =======
 exports.claimSubTask = async (req, res) => {
   try {
     const { projectId, storyId, taskId } = req.params;
@@ -86,6 +89,7 @@ exports.claimSubTask = async (req, res) => {
   }
 };
 
+//======= finish/unfinish a sub-task =======
 exports.toggleFinished = async (req, res) => {
   try {
     const { projectId, storyId, taskId } = req.params;
@@ -93,6 +97,11 @@ exports.toggleFinished = async (req, res) => {
     const task = await SubTask.findOne({ _id: taskId, project: projectId, userStory: storyId });
     if (!task) return res.status(404).json({ message: "Sub-task not found" });
 
+    if (!task.assignedTo || task.assignedTo.toString() !== req.user.userId) {
+      return res.status(403).json({ message: "You can only toggle tasks assigned to you." });
+    }
+
+    // if its finished make it todo and if its todo make it finished
     task.status = task.status === "finished" ? "todo" : "finished";
     await task.save();
     await task.populate({ path: "assignedTo", select: "firstName lastName" });
@@ -104,12 +113,19 @@ exports.toggleFinished = async (req, res) => {
   }
 };
 
+//======= delete a sub-task =======
 exports.deleteSubTask = async (req, res) => {
   try {
     const { projectId, storyId, taskId } = req.params;
 
-    const task = await SubTask.findOneAndDelete({ _id: taskId, project: projectId, userStory: storyId });
+    const task = await SubTask.findOne({ _id: taskId, project: projectId, userStory: storyId });
     if (!task) return res.status(404).json({ message: "Sub-task not found" });
+
+    if (!task.assignedTo || task.assignedTo.toString() !== req.user.userId) {
+      return res.status(403).json({ message: "You can only delete tasks assigned to you." });
+    }
+
+    await SubTask.deleteOne({ _id: taskId });
 
     res.json({ message: "Task successfully removed" });
   } catch (error) {

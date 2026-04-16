@@ -6,28 +6,34 @@ const subTaskSchema = new mongoose.Schema({
     ref: "UserStory",
     required: true,
   },
+
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
     required: true,
   },
+
   title: {
     type: String,
     required: true,
   },
+
   description: {
     type: String,
   },
+
   status: {
     type: String,
     enum: ["todo", "finished"],
     default: "todo",
   },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
+  
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

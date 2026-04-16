@@ -2,15 +2,18 @@ const Sprint = require("../models/Sprint");
 const UserStory = require("../models/UserStory");
 const Project = require("../models/Project");
 
-const calculateEndDate = (startDate, durationString) => {
-  const weeksMatch = durationString.match(/(\d+)\s+Week/i);
-  let weeks = 2; // default
-  if (weeksMatch && weeksMatch[1]) {
-    weeks = parseInt(weeksMatch[1]);
-  }
-  return new Date(startDate.getTime() + weeks * 7 * 24 * 60 * 60 * 1000);
+// function to complete a sprint and move unfinished stories to backlog
+const completeSprint = async (sprint) => {
+  sprint.status = "Completed";
+  await sprint.save();
+
+  await UserStory.updateMany(
+    { sprint: sprint._id, status: { $in: ["To Do", "In Progress"] } },
+    { $set: { sprint: null, status: "To Do" } }
+  );
 };
 
+//======= get the active sprint =======
 exports.getActiveSprint = async (req, res) => {
   try {
     const projectId = req.params.projectId;
@@ -19,14 +22,7 @@ exports.getActiveSprint = async (req, res) => {
 
     if (sprint) {
       if (new Date() > sprint.endDate) {
-        sprint.status = "Completed";
-        await sprint.save();
-
-        await UserStory.updateMany(
-          { sprint: sprint._id, status: { $in: ["To Do", "In Progress"] } },
-          { $set: { sprint: null, status: "To Do" } }
-        );
-
+        await completeSprint(sprint);
         return res.json(null);
       }
       return res.json(sprint);
@@ -39,6 +35,7 @@ exports.getActiveSprint = async (req, res) => {
   }
 };
 
+//======= start a sprint =======
 exports.startSprint = async (req, res) => {
   try {
     const projectId = req.params.projectId;
@@ -50,24 +47,19 @@ exports.startSprint = async (req, res) => {
     const existingActive = await Sprint.findOne({ project: projectId, status: "Active" });
     if (existingActive) {
       if (new Date() > existingActive.endDate) {
-         existingActive.status = "Completed";
-         await existingActive.save();
-         await UserStory.updateMany(
-          { sprint: existingActive._id, status: { $in: ["To Do", "In Progress"] } },
-          { $set: { sprint: null, status: "To Do" } }
-         );
+         await completeSprint(existingActive);
       } else {
         return res.status(400).json({ message: "An active sprint already exists for this project." });
       }
     }
 
     const startDate = new Date();
-    const endDate = calculateEndDate(startDate, project.sprintDuration);
+    const endDate = new Date(startDate.getTime() + project.sprintDuration * 7 * 24 * 60 * 60 * 1000);
 
     const sprintCount = await Sprint.countDocuments({ project: projectId });
     const sprintNumber = sprintCount + 1;
 
-    const sprint = new Sprint({
+    const sprint = await Sprint.create({
       project: projectId,
       goal,
       sprintNumber,
@@ -76,12 +68,10 @@ exports.startSprint = async (req, res) => {
       status: "Active"
     });
 
-    await sprint.save();
-
     if (storyIds && storyIds.length > 0) {
       await UserStory.updateMany(
         { _id: { $in: storyIds }, project: projectId },
-        { $set: { sprint: sprint._id, status: "To Do" } }
+        { $set: { sprint: sprint._id } }
       );
     }
 
@@ -92,6 +82,7 @@ exports.startSprint = async (req, res) => {
   }
 };
 
+//======= end the active sprint =======
 exports.endActiveSprint = async (req, res) => {
   try {
     const projectId = req.params.projectId;
@@ -102,13 +93,7 @@ exports.endActiveSprint = async (req, res) => {
       return res.status(404).json({ message: "No active sprint found" });
     }
 
-    sprint.status = "Completed";
-    await sprint.save();
-
-    await UserStory.updateMany(
-      { sprint: sprint._id, status: { $in: ["To Do", "In Progress"] } },
-      { $set: { sprint: null, status: "To Do" } }
-    );
+    await completeSprint(sprint);
 
     res.json({ message: "Sprint ended successfully and unresolved stories have been moved to the backlog." });
   } catch (error) {

@@ -12,12 +12,11 @@ exports.createEpic = async (req, res) => {
       return res.status(400).json({ message: "Epic title is required." });
     }
 
-    const newEpic = new Epic({
+    const savedEpic = await Epic.create({
       title,
-      color: color || "#3b82f6",
+      color,
       project: projectId,
     });
-    const savedEpic = await newEpic.save();
 
     res.status(201).json(savedEpic);
   } catch (error) {
@@ -46,24 +45,16 @@ exports.createUserStory = async (req, res) => {
     const { projectId } = req.params;
     const { title, description, epicId } = req.body;
 
-    if (!title) {
-      return res.status(400).json({ message: "User Story title is required." });
-    }
-
-    // how many user stories are there in this project
     const count = await UserStory.countDocuments({ project: projectId });
-    
-    const newStory = new UserStory({
+
+    const savedStory = await UserStory.create({
       title,
       description,
       epic: epicId || null,
-      priority: count + 1, // so that it gets placed last
+      priority: count + 1,
       project: projectId,
     });
 
-    const savedStory = await newStory.save();
-    
-    // fetch the information of the selected epic to display it in the frontend
     if (savedStory.epic) {
       await savedStory.populate("epic");
     }
@@ -132,20 +123,15 @@ exports.deleteUserStory = async (req, res) => {
     res.status(500).json({ message: "Server error deleting story." });
   }
 };
-//==== update priorities when changing the user storie order ====
+//==== update priorities when changing the user stories order ====
 exports.reorderStories = async (req, res) => {
   try {
-    const { projectId } = req.params;
     const { order } = req.body; // Array of story IDs in new order
-
-    if (!Array.isArray(order)) {
-      return res.status(400).json({ message: "Order must be an array of IDs." });
-    }
 
     // loop through the order array and update the priority of each story
     const bulkOps = order.map((id, index) => ({
       updateOne: {
-        filter: { _id: id, project: projectId },
+        filter: { _id: id },
         update: { $set: { priority: index + 1 } },
       },
     }));

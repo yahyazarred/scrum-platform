@@ -1,6 +1,7 @@
 const Blocker = require("../models/Blocker");
 const UserStory = require("../models/UserStory");
 
+//======= get blockers =======
 exports.getBlockers = async (req, res) => {
   try {
     const { projectId, storyId } = req.params;
@@ -16,6 +17,7 @@ exports.getBlockers = async (req, res) => {
   }
 };
 
+//======= create a blocker =======
 exports.createBlocker = async (req, res) => {
   try {
     const { projectId, storyId } = req.params;
@@ -25,7 +27,7 @@ exports.createBlocker = async (req, res) => {
       return res.status(400).json({ message: "Description is required" });
     }
 
-    const blocker = new Blocker({
+    const blocker = await Blocker.create({
       project: projectId,
       userStory: storyId,
       createdBy: req.user.userId,
@@ -33,10 +35,9 @@ exports.createBlocker = async (req, res) => {
       status: "unsolved"
     });
 
-    await blocker.save();
     await blocker.populate({ path: "createdBy", select: "firstName lastName" });
 
-    // Inherently lock the story
+    // lock the story
     await UserStory.findByIdAndUpdate(storyId, { isBlocked: true });
 
     res.status(201).json(blocker);

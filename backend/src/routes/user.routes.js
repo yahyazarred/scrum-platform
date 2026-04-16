@@ -1,13 +1,3 @@
-// ============================================================
-// What is this file?
-//   Maps URLs to controller functions for user data.
-//   These routes are protected (you must be logged in).
-//                     
-//   protect runs first, checks token.
-//   If token is valid → getMe runs.
-//   If token is invalid → protect sends 401, getMe never runs.
-// ============================================================
-
 const express = require("express");
 const router = express.Router();
 const protect = require("../middleware/auth.middleware");
@@ -16,7 +6,7 @@ const userController = require("../controllers/user.controller");
 // All user routes require authentication
 router.use(protect);
 
-router.get("/me", userController.getMe);
-router.put("/me", userController.updateMe); // update profile
+router.get("/get-profile", userController.getMe);
+router.put("/update-profile", userController.updateMe);
 
 module.exports = router;

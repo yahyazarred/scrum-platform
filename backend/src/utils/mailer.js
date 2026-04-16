@@ -1,5 +1,4 @@
 // ============================================================
-// What is this file?
 //   provided with the gmail address that will send the email and the email content
 //   this file sends an email with a html/css interface containing the verification code
 // ============================================================

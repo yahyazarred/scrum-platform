@@ -1,40 +1,22 @@
-// ============================================================
-// What is this file?
-//   Defines project-related routes (create, fetch, join).
-// ============================================================
-
 const express = require("express");
+const router = express.Router();
 const protect = require("../middleware/auth.middleware");
 const projectController = require("../controllers/project.controller");
-
-const router = express.Router();
+const { verifyProjectMembership, requireRole } = require("../middleware/project.middleware");
 
 // All project routes require authentication
 router.use(protect);
 
-const { verifyProjectMembership, requireRole } = require("../middleware/project.middleware");
+router.get("/get-my-projects", projectController.getUserProjects);
+router.get("/get-project/:projectId", verifyProjectMembership, projectController.getProjectById);
+router.post("/create-project", projectController.createProject);
+router.put("/update-project/:projectId", verifyProjectMembership, requireRole("product_owner"), projectController.updateProject);
+router.delete("/delete-project/:projectId", verifyProjectMembership, requireRole("product_owner"), projectController.deleteProject);
+router.post("/join-project", projectController.joinProject);
 
-// Get the projects for the logged-in user
-router.get("/my-projects", projectController.getUserProjects);
-
-// Get a single project
-router.get("/:projectId", verifyProjectMembership, projectController.getProjectById);
-
-// Create a new project
-router.post("/", projectController.createProject);
-
-// Update a project
-router.put("/:projectId", verifyProjectMembership, requireRole("product_owner"), projectController.updateProject);
-
-// Delete a project
-router.delete("/:projectId", verifyProjectMembership, requireRole("product_owner"), projectController.deleteProject);
-
-// Join a project via join code
-router.post("/join", projectController.joinProject);
-
-// Members logic
-router.get("/:projectId/members", verifyProjectMembership, projectController.getProjectMembers);
-router.delete("/:projectId/members/leave", verifyProjectMembership, projectController.leaveProject);
-router.delete("/:projectId/members/:memberId", verifyProjectMembership, requireRole("product_owner"), projectController.kickMember);
+//==== team members routes ====
+router.get("/get-members/:projectId", verifyProjectMembership, projectController.getProjectMembers);
+router.delete("/leave-project/:projectId", verifyProjectMembership, projectController.leaveProject);
+router.delete("/kick-member/:projectId/:memberId", verifyProjectMembership, requireRole("product_owner"), projectController.kickMember);
 
 module.exports = router;

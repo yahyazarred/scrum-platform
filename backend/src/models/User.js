@@ -1,7 +1,3 @@
-// ============================================================
-// What is this file?
-//   creates the user entity in the database
-// ============================================================
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(

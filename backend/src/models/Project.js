@@ -11,7 +11,7 @@ const projectSchema = new mongoose.Schema({
   },
 
   sprintDuration: {
-    type: String,
+    type: Number,
     required: true,
   },
 
@@ -34,7 +34,6 @@ const projectSchema = new mongoose.Schema({
       required: true,
     },
   },
-
 
   createdAt: {
     type: Date,

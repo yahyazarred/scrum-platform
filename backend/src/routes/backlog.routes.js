@@ -1,28 +1,22 @@
-// ============================================================
-// What is this file?
-//   Defines backlog-related routes (Epics and User Stories).
-//   All routes require auth AND verified project membership.
-// ============================================================
-
 const express = require("express");
-const router = express.Router({ mergeParams: true }); // mergeParams is important because the route will be mounted on /api/projects/:projectId/backlog
+const router = express.Router({ mergeParams: true }); //!!!
 const backlogController = require("../controllers/backlog.controller");
 const protect = require("../middleware/auth.middleware");
 const { verifyProjectMembership } = require("../middleware/project.middleware");
 
-// All backlog routes require authentication AND project membership
+// All backlog routes require authentication and project membership
 router.use(protect);
 router.use(verifyProjectMembership);
 
-// Epic routes
-router.post("/epics", backlogController.createEpic);
-router.get("/epics", backlogController.getEpics);
+//==== epics routes ====
+router.post("/create-epic", backlogController.createEpic);
+router.get("/get-epics", backlogController.getEpics);
 
-// User Story routes
-router.post("/stories", backlogController.createUserStory);
-router.get("/stories", backlogController.getUserStories);
-router.put("/stories/reorder", backlogController.reorderStories);
-router.put("/stories/:storyId", backlogController.updateUserStory);
-router.delete("/stories/:storyId", backlogController.deleteUserStory);
+//==== user stories routes ====
+router.post("/create-story", backlogController.createUserStory);
+router.get("/get-stories", backlogController.getUserStories);
+router.put("/reorder-stories", backlogController.reorderStories);
+router.put("/update-story/:storyId", backlogController.updateUserStory);
+router.delete("/delete-story/:storyId", backlogController.deleteUserStory);
 
 module.exports = router;

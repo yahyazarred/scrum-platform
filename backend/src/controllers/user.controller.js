@@ -1,9 +1,3 @@
-// ============================================================
-// What is this file?
-//   Handles everything related to the logged-in user's data.
-//   Right now: just fetching the current user's profile.
-// ============================================================
-
 const User = require("../models/User");
 
 // ================= get the information of the logged in user================= //
@@ -40,8 +34,10 @@ exports.updateMe = async (req, res) => {
     const currentUser = await User.findById(req.user.userId);
     if (!currentUser) return res.status(404).json({ message: "User not found" });
  
+    //check if we got an email in the request and if it is different from the current email
     const emailChanged = email && email !== currentUser.email;
  
+    //verify that the new email is not used by another user
     if (emailChanged) {
       const existing = await User.findOne({ email });
       if (existing && existing._id.toString() !== req.user.userId) {
@@ -60,7 +56,7 @@ exports.updateMe = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.user.userId,
       updates,
-      { new: true }
+      { new: true } //get the new updated user data
     ).select("-password");
  
     res.json({

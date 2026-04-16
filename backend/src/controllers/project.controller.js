@@ -1,40 +1,51 @@
-// ============================================================
-// What is this file?
-//   Controller for project-related operations (create, join, fetch).
-// ============================================================
-
 const Project = require("../models/Project");
 const ProjectMembership = require("../models/ProjectMembership");
+const User = require("../models/User");
+const Epic = require("../models/Epic");
+const UserStory = require("../models/UserStory");
+const SubTask = require("../models/SubTask");
 
-// Helper to generate a 6-character uppercase alphanumeric code
-const generateJoinCode = () => {
-  return Math.random().toString(36).substring(2, 8).toUpperCase();
+// function to generate a unique 6-character uppercase alphanumeric code
+const generateUniqueJoinCode = async (excludeCodes = []) => {
+  let isUnique = false;
+  let code;
+  while (!isUnique) {
+    code = Math.random().toString(36).substring(2, 8).toUpperCase();
+    if (excludeCodes.includes(code)) continue;
+
+    const existingProject = await Project.findOne({
+      $or: [
+        { "joinCodes.scrumMaster": code },
+        { "joinCodes.developer": code }
+      ]
+    });
+    if (!existingProject) {
+      isUnique = true;
+    }
+  }
+  return code;
 };
 //=================project creation=============
 exports.createProject = async (req, res) => {
   try {
     const { name, description, sprintDuration, projectGoal, githubLink } = req.body;
     const userId = req.user.userId;
-
-    const User = require("../models/User");
     const user = await User.findById(userId);
+
     if (!user || user.status !== "VERIFIED") {
       return res.status(403).json({ message: "You must be verified to create a project." });
     }
 
     if (!name || !sprintDuration || !projectGoal) {
-      return res.status(400).json({ message: "Project name, sprint duration, and project goal are required" });
+      return res.status(400).json({
+        message: "Project name, sprint duration, and project goal are required"
+      });
     }
 
-    const scrumMasterCode = generateJoinCode();
-    let developerCode = generateJoinCode();
-    
-    // Ensure they are unique
-    while (scrumMasterCode === developerCode) {
-      developerCode = generateJoinCode();
-    }
+    const scrumMasterCode = await generateUniqueJoinCode();
+    const developerCode = await generateUniqueJoinCode([scrumMasterCode]);
 
-    const newProject = new Project({
+    const savedProject = await Project.create({
       name,
       description,
       sprintDuration,
@@ -45,14 +56,12 @@ exports.createProject = async (req, res) => {
         developer: developerCode,
       },
     });
-    const savedProject = await newProject.save();
 
-    const membership = new ProjectMembership({
+    const membership = await ProjectMembership.create({
       user: userId,
       project: savedProject._id,
       role: "product_owner",
     });
-    await membership.save();
 
     res.status(201).json({
       message: "Project created successfully",
@@ -85,7 +94,6 @@ exports.joinProject = async (req, res) => {
     const { joinCode } = req.body;
     const userId = req.user.userId;
 
-    const User = require("../models/User");
     const user = await User.findById(userId);
     if (!user || user.status !== "VERIFIED") {
       return res.status(403).json({ message: "You must be verified to join a project." });
@@ -95,7 +103,6 @@ exports.joinProject = async (req, res) => {
       return res.status(400).json({ message: "Join code is required" });
     }
 
-    // Find project that matches the join code in either scrumMaster or developer
     const project = await Project.findOne({
       $or: [
         { "joinCodes.scrumMaster": joinCode },
@@ -107,7 +114,6 @@ exports.joinProject = async (req, res) => {
       return res.status(404).json({ message: "Invalid join code." });
     }
 
-    // Check if user is already a member
     const existingMembership = await ProjectMembership.findOne({
       user: userId,
       project: project._id,
@@ -125,12 +131,23 @@ exports.joinProject = async (req, res) => {
       role = "developer";
     }
 
-    const membership = new ProjectMembership({
+    // Ensure only one Scrum Master per project
+    if (role === "scrum_master") {
+      const existingScrumMaster = await ProjectMembership.findOne({
+        project: project._id,
+        role: "scrum_master",
+      });
+
+      if (existingScrumMaster) {
+        return res.status(400).json({ message: "This project already has a Scrum Master." });
+      }
+    }
+
+    const membership = await ProjectMembership.create({
       user: userId,
       project: project._id,
       role,
     });
-    await membership.save();
 
     res.status(200).json({
       message: `Successfully joined the project as ${role}`,
@@ -197,15 +214,10 @@ exports.deleteProject = async (req, res) => {
   try {
     const projectId = req.params.projectId;
 
-    const Epic = require("../models/Epic");
-    const UserStory = require("../models/UserStory");
-
-    // Delete cascading references
     await UserStory.deleteMany({ project: projectId });
     await Epic.deleteMany({ project: projectId });
     await ProjectMembership.deleteMany({ project: projectId });
 
-    // Delete the project itself
     const project = await Project.findByIdAndDelete(projectId);
 
     if (!project) {
@@ -223,6 +235,7 @@ exports.deleteProject = async (req, res) => {
 exports.getProjectMembers = async (req, res) => {
   try {
     const projectId = req.params.projectId;
+    // lean transfroms the data into js objects and not documents (faster)
     const memberships = await ProjectMembership.find({ project: projectId }).populate("user", "firstName lastName email").lean();
     res.status(200).json(memberships);
   } catch (error) {
@@ -245,8 +258,7 @@ exports.leaveProject = async (req, res) => {
 
     await ProjectMembership.findByIdAndDelete(membership._id);
 
-    // Completely wipe their assignment references across the board
-    const SubTask = require("../models/SubTask");
+    // make their subtasks free to claim by someone else
     await SubTask.updateMany({ project: projectId, assignedTo: userId }, { assignedTo: null });
 
     res.status(200).json({ message: "Successfully left the project" });
@@ -269,8 +281,7 @@ exports.kickMember = async (req, res) => {
     }
 
     await ProjectMembership.findByIdAndDelete(targetMembership._id);
-
-    const SubTask = require("../models/SubTask");
+    // make their subtasks free to claim by someone else
     await SubTask.updateMany({ project: projectId, assignedTo: memberId }, { assignedTo: null });
 
     res.status(200).json({ message: "Member kicked successfully" });

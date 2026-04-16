@@ -1,19 +1,6 @@
-// ============================================================
-// What is this file?
-//   Middleware that checks if the authenticated user is a member
-//   of the requested project before allowing access to the route.
-//
-// How it works:
-//   1. Gets userId from req.user and projectId from req.params
-//   2. Validates that projectId exists
-//   3. Checks the database for a matching membership
-//   4. If not found → returns 403 (access denied)
-//   5. If found → attaches membership to req.projectMembership
-//   6. Calls next() to continue to the controller
-// ============================================================
-
 const ProjectMembership = require("../models/ProjectMembership");
 
+//verifies that the user is part of the project
 exports.verifyProjectMembership = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -39,6 +26,7 @@ exports.verifyProjectMembership = async (req, res, next) => {
   }
 };
 
+//verifies if the user has the required role in the project
 exports.requireRole = (requiredRole) => {
   return (req, res, next) => {
     // This middleware relies on verifyProjectMembership running first

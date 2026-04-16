@@ -1,11 +1,3 @@
-// ============================================================
-// What it does:
-//   1. Gets the user from the token (req.user set by middleware)
-//   2. Checks they are actually still unverified
-//   3. Generates a fresh 6-digit code (replaces any old one)
-//   4. Sends the email
-// ============================================================
-
 const User = require("../models/User");
 const EmailVerification = require("../models/EmailVerification");
 const sendVerificationEmail = require("../utils/mailer");
@@ -19,20 +11,16 @@ exports.resendVerification = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Don't send a code to someone who is already verified
     if (user.status === "VERIFIED") {
       return res.status(400).json({ message: "This account is already verified" });
     }
-
-    // Generate a fresh 6-digit code
+    
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    // Replace any existing code for this email (deleteOne + create)
     await EmailVerification.deleteOne({ email: user.email });
     await EmailVerification.create({ email: user.email, code: verificationCode, expiresAt });
 
-    // Send the email — if this fails the user gets an error, not a false success
     console.log(`[DEV] Resend code for ${user.email}: ${verificationCode}`);
     await sendVerificationEmail(user.email, verificationCode);
 
