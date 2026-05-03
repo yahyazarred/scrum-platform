@@ -5,13 +5,13 @@
 .projectCard {
     background: var(--bg-dark);
     border: 1px solid var(--primary-blue-light);
-    border-radius: 16px;
-    padding: 25px;
+    border-radius: 12px;
+    padding: 18.75px;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(7.51px);
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 11.25px;
     cursor: pointer;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -20,8 +20,8 @@
 
 /* Hovering over the Project Card makes it float up and glow blue */
 .projectCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3.75px);
+    box-shadow: 0 6px 18.75px rgba(0, 0, 0, 0.3);
     border-color: var(--primary-blue-border);
 }
 
@@ -35,7 +35,7 @@
 /* The Project Name */
 .title {
     color: #fff;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 600;
 }
 
@@ -46,7 +46,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
+    padding: 3px;
+    font-size: 22.51px;
 }
 .githubLink:hover {
     color: #fff;
@@ -55,10 +56,10 @@
 /* box containing the Project Goal */
 .projectGoal {
     background: var(--primary-blue-light);
-    border-left: 3px solid var(--primary-blue);
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-size: 14px;
+    border-left: 2.25px solid var(--primary-blue);
+    padding: 7.51px 11.25px;
+    border-radius: 3px;
+    font-size: 10.51px;
     color: #e2e8f0;
 }
 .projectGoal strong {
@@ -68,7 +69,7 @@
 /* The standard paragraph text describing the project under the goal */
 .projectDesc {
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 10.51px;
     line-height: 1.5;
     flex-grow: 1;
 }
@@ -76,7 +77,7 @@
 /* The bottom row inside the card where your Scrum Role is badged */
 .projectRole {
     margin-top: auto;
-    padding-top: 15px;
+    padding-top: 11.25px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
@@ -86,9 +87,9 @@
 /* The badge identifying your role */
 .roleBadge {
     display: inline-block;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
+    padding: 4.51px 10.51px;
+    border-radius: 15px;
+    font-size: 9px;
     font-weight: 600;
     text-transform: capitalize;
 }
@@ -112,13 +113,13 @@
 
 /* (ONLY FOR PRODUCT OWNERS) box showing the 6-digit codes to invite teammates */
 .joinCodesContainer {
-    margin-top: 12px;
-    padding: 12px;
+    margin-top: 9px;
+    padding: 9px;
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 7.51px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     border: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
@@ -127,7 +128,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
+    font-size: 9.75px;
 }
 .codeRow span {
     color: var(--text-muted);
@@ -136,8 +137,8 @@
 /* The actual 6-digit string e.g., AB12CD */
 .codeRow code {
     background: rgba(255, 255, 255, 0.05);
-    padding: 4px 10px;
-    border-radius: 6px;
+    padding: 3px 7.51px;
+    border-radius: 4.51px;
     font-family: monospace;
     font-weight: bold;
     letter-spacing: 1px;

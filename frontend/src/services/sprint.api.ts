@@ -1,3 +1,11 @@
+import { request } from "./apiClient";
+
+export interface BurndownDataPoint {
+  date: string;
+  expectedRemaining: number;
+  actualRemaining: number | null;
+}
+
 export interface SprintData {
   _id: string;
   project: string;
@@ -6,61 +14,25 @@ export interface SprintData {
   startDate: string;
   endDate: string;
   status: "Active" | "Completed";
+  metrics?: {
+    totalPoints: number;
+    completedPoints: number;
+  };
+  burndownData?: BurndownDataPoint[];
 }
 
-const API_URL = "http://localhost:5000/api/sprints";
 
-export const getActiveSprint = async (token: string, projectId: string): Promise<SprintData | null> => {
-  const response = await fetch(`${API_URL}/active/${projectId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getActiveSprint = (token: string, projectId: string) =>
+  request<SprintData | null>(`/projects/${projectId}/sprints/get-active-sprint`, { token });
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch active sprint");
-  }
+export const startSprint = (token: string, projectId: string, data: { goal: string; storyIds: string[] }) =>
+  request<SprintData>(`/projects/${projectId}/sprints/start-sprint`, {method: "POST",token, body: data,});
 
-  return response.json(); 
-};
+export const endSprint = (token: string, projectId: string) =>
+  request<{ message: string }>(`/projects/${projectId}/sprints/end-sprint`, {method: "POST",token,});
 
-export const startSprint = async (
-  token: string,
-  projectId: string,
-  data: { goal: string; storyIds: string[] }
-): Promise<SprintData> => {
-  const response = await fetch(`${API_URL}/start/${projectId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
+export const getSprintHistory = (token: string, projectId: string) =>
+  request<SprintData[]>(`/projects/${projectId}/sprints/history`, { token });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to start sprint");
-  }
-
-  return response.json();
-};
-
-export const endSprint = async (token: string, projectId: string): Promise<{ message: string }> => {
-  const response = await fetch(`${API_URL}/end/${projectId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to end sprint");
-  }
-
-  return response.json();
-};
+export const getActiveSprintBurndown = (token: string, projectId: string) =>
+  request<BurndownDataPoint[]>(`/projects/${projectId}/sprints/active/burndown`, { token });

@@ -27,16 +27,16 @@ exports.verifyProjectMembership = async (req, res, next) => {
 };
 
 //verifies if the user has the required role in the project
-exports.requireRole = (requiredRole) => {
+exports.requireRole = (...requiredRoles) => {
   return (req, res, next) => {
     // This middleware relies on verifyProjectMembership running first
     if (!req.projectMembership) {
       return res.status(500).json({ message: "Server configuration error: Membership not checked." });
     }
 
-    if (req.projectMembership.role !== requiredRole) {
+    if (!requiredRoles.includes(req.projectMembership.role)) {
       return res.status(403).json({ 
-        message: `Action not allowed. You must be a ${requiredRole.replace('_', ' ')} to perform this action.` 
+        message: `Action not allowed. You must be a ${requiredRoles.map(r => r.replace('_', ' ')).join(' or ')} to perform this action.` 
       });
     }
 

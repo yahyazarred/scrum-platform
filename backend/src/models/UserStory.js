@@ -43,6 +43,17 @@ const userStorySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+
+  storyPoints: {
+    type: Number,
+    enum: [1, 2, 3, 5, 8, 13, 21],
+    default: null,
+  },
+
+  completedAt: {
+    type: Date,
+    default: null,
+  },
   
   createdAt: {
     type: Date,

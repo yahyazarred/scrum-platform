@@ -85,21 +85,30 @@ exports.updateUserStory = async (req, res) => {
     const { projectId, storyId } = req.params;
     const { title, description, epicId, status } = req.body;
 
+    const story = await UserStory.findOne({ _id: storyId, project: projectId });
+    if (!story) return res.status(404).json({ message: "Story not found." });
+
     const updateData = {};
     if (title !== undefined) updateData.title = title;
     if (description !== undefined) updateData.description = description;
     if (epicId !== undefined) updateData.epic = epicId || null; // allow nulling out epic
-    if (status !== undefined) updateData.status = status;
+    
+    if (status !== undefined) {
+      updateData.status = status;
+      if (status === "Done" && story.status !== "Done") {
+        updateData.completedAt = new Date();
+      } else if (status !== "Done" && story.status === "Done") {
+        updateData.completedAt = null;
+      }
+    }
 
-    const story = await UserStory.findOneAndUpdate(
-      { _id: storyId, project: projectId },// get the story by its id and the project id
-      { $set: updateData },// update provided fields
-      { new: true } // return the updated story
+    const updatedStory = await UserStory.findOneAndUpdate(
+      { _id: storyId, project: projectId },
+      { $set: updateData },
+      { new: true }
     ).populate("epic");
 
-    if (!story) return res.status(404).json({ message: "Story not found." });
-
-    res.status(200).json(story);
+    res.status(200).json(updatedStory);
   } catch (error) {
     console.error("Error updating story:", error);
     res.status(500).json({ message: "Server error updating story." });
@@ -147,3 +156,33 @@ exports.reorderStories = async (req, res) => {
     res.status(500).json({ message: "Server error reordering stories." });
   }
 };
+
+// ==== estimate story points (strictly for developers) ====
+exports.estimateStoryPoints = async (req, res) => {
+  try {
+    const { projectId, storyId } = req.params;
+    const { storyPoints } = req.body;
+
+    // Optional validation logic if not strictly done by frontend
+    const allowedFibonacci = [1, 2, 3, 5, 8, 13, 21];
+    if (storyPoints !== null && !allowedFibonacci.includes(storyPoints)) {
+      return res.status(400).json({ message: "Invalid story points. Must be a Fibonacci number up to 21." });
+    }
+
+    const story = await UserStory.findOneAndUpdate(
+      { _id: storyId, project: projectId },
+      { $set: { storyPoints } },
+      { new: true }
+    ).populate("epic");
+
+    if (!story) {
+      return res.status(404).json({ message: "Story not found." });
+    }
+
+    res.status(200).json(story);
+  } catch (error) {
+    console.error("Error estimating story points:", error);
+    res.status(500).json({ message: "Server error estimating story points." });
+  }
+};
+

@@ -15,11 +15,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px;
-    height: 70px;
+    padding: 0 30px;
+    height: 52.51px;
     background: rgba(15, 22, 32, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
     border-bottom: 1px solid rgba(77, 184, 232, 0.18);
     position: fixed;   
     top: 0;
@@ -31,23 +31,23 @@
 .header-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 9px;
 }
 
 .logo-placeholder {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;  
-    margin-top: 13px;
+    margin-top: 9.75px;
 }
 
 .logo-text {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 700;
     color: #ffffff;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.39px;
 }
 
 .logo-text span {
@@ -58,22 +58,22 @@
 .back-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: rgba(77, 184, 232, 0.08);
     border: 1px solid rgba(77, 184, 232, 0.3);
-    border-radius: 30px;
-    padding: 8px 20px;
+    border-radius: 22.51px;
+    padding: 6px 15px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #b0c4de;
-    font-size: 14px;
+    font-size: 10.51px;
     font-weight: 500;
 }
 
 .back-btn:hover {
     background: rgba(77, 184, 232, 0.18);
     border-color: #4db8e8;
-    box-shadow: 0 0 20px rgba(77, 184, 232, 0.25);
+    box-shadow: 0 0 15px rgba(77, 184, 232, 0.25);
     color: #ffffff;
 }
 
@@ -84,54 +84,54 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 110px 20px 40px; 
+    padding: 82.51px 15px 30px; 
 }
 
 /* ── Profile Card ── */
 /* The glowing container holding all the user's data */
 .profile-card {
     background: linear-gradient(135deg, #1a2540 0%, #1e2a45 100%);
-    border-radius: 30px;
+    border-radius: 22.51px;
     border: 1px solid rgba(77, 184, 232, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
-                0 0 60px rgba(77, 184, 232, 0.08);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6),
+                0 0 45px rgba(77, 184, 232, 0.08);
     width: 100%;
-    max-width: 700px;
+    max-width: 525px;
     overflow: hidden;
     animation: fadeUp 0.5s ease forwards;
 }
 
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
+    from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Card top banner ── */
 /* The colored background art at the top of the profile card (like a twitter header) */
 .profile-banner {
-    height: 100px;
+    height: 75px;
     background: linear-gradient(135deg, #1e3a52 0%, #2d5a7b 50%, #3a6d8f 100%);
     position: relative;
-    box-shadow: inset 0 0 60px rgba(77, 184, 232, 0.15);
+    box-shadow: inset 0 0 45px rgba(77, 184, 232, 0.15);
 }
 
 /* ── Avatar ── */
 /* The large circle intersecting the banner showing the user's initials */
 .profile-avatar-large {
-    width: 90px;
-    height: 90px;
+    width: 67.51px;
+    height: 67.51px;
     border-radius: 50%;
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 36px;
+    font-size: 27px;
     font-weight: 700;
     color: #fff;
-    border: 4px solid #1a2540;
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    border: 3px solid #1a2540;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
     position: absolute;
-    bottom: -45px;
+    bottom: -33.75px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -139,15 +139,15 @@
 /* ── Card body ── */
 /* The area holding the text strings and edit buttons below the banner */
 .profile-body {
-    padding: 60px 40px 40px;
+    padding: 45px 30px 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4.51px;
 }
 
 .profile-name {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
     color: #ffffff;
     text-align: center;
@@ -157,14 +157,14 @@
 .profile-status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 14px;
-    border-radius: 50px;
-    font-size: 12px;
+    gap: 4.51px;
+    padding: 3px 10.51px;
+    border-radius: 37.51px;
+    font-size: 9px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-top: 4px;
+    letter-spacing: 0.6px;
+    margin-top: 3px;
 }
 
 /* Hardcoded styles dynamically switching based on user verification state */
@@ -181,8 +181,8 @@
 }
 
 .status-dot {
-    width: 7px;
-    height: 7px;
+    width: 5.25px;
+    height: 5.25px;
     border-radius: 50%;
     background: currentColor;
 }
@@ -191,20 +191,20 @@
 /* The list containing First Name, Last Name, and Email */
 .profile-info-section {
     width: 100%;
-    margin-top: 24px;
+    margin-top: 18px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10.51px;
 }
 
 .profile-info-row {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10.51px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(77, 184, 232, 0.12);
-    border-radius: 12px;
-    padding: 14px 18px;
+    border-radius: 9px;
+    padding: 10.51px 13.51px;
     transition: border-color 0.2s ease;
 }
 
@@ -213,29 +213,29 @@
 }
 
 .info-icon {
-    font-size: 18px;
+    font-size: 13.51px;
     flex-shrink: 0;
-    width: 32px;
+    width: 24px;
     text-align: center;
 }
 
 .info-content {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1.51px;
     min-width: 0;
 }
 
 .info-label {
-    font-size: 11px;
+    font-size: 8.25px;
     font-weight: 600;
     color: #4db8e8;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
 }
 
 .info-value {
-    font-size: 15px;
+    font-size: 11.25px;
     font-weight: 500;
     color: #d0dce8;
     white-space: nowrap;
@@ -249,8 +249,8 @@
 .profile-error {
     text-align: center;
     color: #6a7a94;
-    font-size: 15px;
-    padding: 40px 0 20px;
+    font-size: 11.25px;
+    padding: 30px 0 15px;
 }
 
 .profile-error {
@@ -259,30 +259,30 @@
 
 /* ── Logout button ── */
 .logout-btn {
-    margin-top: 30px;
+    margin-top: 22.51px;
     width: 100%;
-    padding: 13px;
+    padding: 9.75px;
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     color: #fff;
-    font-size: 15px;
+    font-size: 11.25px;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
     border: none;
-    border-radius: 12px;
+    border-radius: 9px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 3px 11.25px rgba(255, 107, 53, 0.3);
 }
 
 .logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+    transform: translateY(-1.49px);
+    box-shadow: 0 4.51px 15px rgba(255, 107, 53, 0.5);
 }
 
 .logo-placeholder img {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
 }
 
@@ -290,18 +290,18 @@
 .verify-banner {
   background: rgba(255, 50, 50, 0.08);
   border: 1px solid rgba(255, 50, 50, 0.35);
-  border-radius: 10px;
-  padding: 16px 20px;
-  margin: 16px 0 24px;
+  border-radius: 7.51px;
+  padding: 12px 15px;
+  margin: 12px 0 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
   align-items: center;
 }
 
 .verify-banner-text {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.67rem;
   color: #ffffff;
   line-height: 1.5;
   text-align: center;
@@ -309,13 +309,13 @@
 
 .verify-account-btn {
   align-self: center;
-  padding: 10px 22px;
+  padding: 7.51px 16.51px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   background: linear-gradient(135deg, #ff3535 0%, #f71e1e 100%);;
   color: #1a1a2e;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.67rem;
   cursor: pointer;
   transition: opacity 0.2s;
 }
@@ -336,8 +336,8 @@
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   color: inherit;
-  font-size: 0.95rem;
-  padding: 2px 4px;
+  font-size: 0.71rem;
+  padding: 1.51px 3px;
   width: 100%;
   outline: none;
   transition: border-color 0.2s;
@@ -349,37 +349,37 @@
 
 /* The "Edit Profile" button turning into a form mode */
 .edit-profile-btn {
-  margin-top: 30px;
+  margin-top: 22.51px;
     width: 100%;
-    padding: 13px;
+    padding: 9.75px;
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     color: #fff;
-    font-size: 15px;
+    font-size: 11.25px;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
     border: none;
-    border-radius: 12px;
+    border-radius: 9px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 3px 11.25px rgba(255, 107, 53, 0.3);
 }
 
 .edit-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 7.51px;
+  margin-top: 15px;
 }
 
 /* The Blue "Save" button shown while editing */
 .save-btn {
-  padding: 10px 24px;
+  padding: 7.51px 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #4db8e8;
   color: #0a0f16;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.67rem;
   cursor: pointer;
   transition: opacity 0.2s;
 }
@@ -389,12 +389,12 @@
 
 /* The clear "Cancel" button shown while editing */
 .cancel-btn {
-  padding: 10px 24px;
+  padding: 7.51px 18px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: inherit;
-  font-size: 0.875rem;
+  font-size: 0.67rem;
   cursor: pointer;
   transition: background 0.2s;
 }

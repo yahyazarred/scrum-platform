@@ -34,7 +34,7 @@ const EpicDrawer: React.FC<EpicDrawerProps> = ({ epics, isOpen, onClose, onCreat
       <div className="epic-drawer" onClick={(e) => e.stopPropagation()}>
         <div className="epic-drawer-header">
           <h3>Manage Epics</h3>
-          <Button variant="ghost" onClick={onClose} style={{ padding: '4px 8px', fontSize: '1.5rem' }}>&times;</Button>
+          <Button variant="ghost" onClick={onClose} style={{ padding: '4px 8px', fontSize: '1.51rem' }}>&times;</Button>
         </div>
         
         {/* Section 1: Displaying current Epics */}

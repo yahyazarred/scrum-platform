@@ -7,6 +7,7 @@ import { startSprint } from "../../services/sprint.api";
 import type { SprintData } from "../../services/sprint.api";
 import { Button } from "../ui/Button/Button";
 import { toast } from "react-toastify";
+import { getStoryPointClass } from "../Backlog/StoryCard";
 import "../Backlog/Backlog.css";
 
 interface StartSprintDrawerProps {
@@ -127,9 +128,14 @@ const StartSprintDrawer: React.FC<StartSprintDrawerProps> = ({ isOpen, onClose, 
                     {story.description}
                   </p>
                 )}
-                <span className="drawer-story-priority">
-                  Priority: #{story.priority}
-                </span>
+                <div className="drawer-story-meta">
+                  <span className="drawer-story-priority">
+                    Priority: #{story.priority}
+                  </span>
+                  <span className={`drawer-story-points ${getStoryPointClass(story.storyPoints)}`}>
+                    {story.storyPoints ? `${story.storyPoints} pts` : "Unestimated"}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

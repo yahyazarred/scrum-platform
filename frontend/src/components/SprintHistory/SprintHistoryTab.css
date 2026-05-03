@@ -1,0 +1,110 @@
+.sprint-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.51rem;
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.history-loading, .history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: var(--text-muted, #94a3b8);
+  text-align: center;
+}
+
+.history-empty h3 {
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.history-bottom-section {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1.88rem;
+}
+
+.history-selector h3 {
+  font-size: 0.91rem;
+  color: #fff;
+  margin-bottom: 0.95rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 6px;
+}
+
+.sprint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-height: 375px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.sprint-list::-webkit-scrollbar { width: 4.51px; }
+.sprint-list::-webkit-scrollbar-track { background: rgba(15, 22, 32, 0.8); }
+.sprint-list::-webkit-scrollbar-thumb { background: rgba(77, 184, 232, 0.4); border-radius: 2.25px; }
+
+.history-sprint-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 7.51px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.history-sprint-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(77, 184, 232, 0.4);
+  transform: translateX(3px);
+}
+
+.history-sprint-card.active {
+  background: rgba(77, 184, 232, 0.12);
+  border-color: var(--primary-blue, #4db8e8);
+  box-shadow: 0 0 7.51px rgba(77, 184, 232, 0.15);
+}
+
+.history-sprint-card h4 {
+  margin: 0 0 4.51px 0;
+  color: #fff;
+  font-size: 0.79rem;
+}
+
+.history-sprint-card p {
+  margin: 0;
+  font-size: 0.6rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.history-metrics-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px 6px;
+  border-radius: 4.51px;
+  font-size: 0.6rem;
+  font-weight: bold;
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.select-sprint-prompt, .no-burndown-data {
+  height: 100%;
+  min-height: 262.51px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 22, 32, 0.5);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 9px;
+  color: var(--text-muted, #94a3b8);
+}

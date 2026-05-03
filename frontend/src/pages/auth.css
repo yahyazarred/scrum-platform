@@ -16,85 +16,93 @@
 .name-container {
     display: flex;              /* makes children go in a row */
     justify-content: center;    /* centers them horizontally */
-    gap: 10px;                  /* space between inputs */
+    gap: 7.5px;                  /* space between inputs */
 }
 
-/* The massive parent box holding BOTH forms and the sliding panel */
+/* Keyframe for entrance animation */
+@keyframes containerEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(15px);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6),
+                    0 0 45px rgba(77, 184, 232, 0.1);
+    }
+}
+
 .container {
     background: linear-gradient(135deg, #1a2540 0%, #1e2a45 100%);
-    border-radius: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6),
-                0 0 60px rgba(77, 184, 232, 0.1);
+    border-radius: 22.5px;
     border: 1px solid rgba(77, 184, 232, 0.2);
     position: relative;
     overflow: hidden;
-    width: 1500px;
-    height: 800px;
+    width: 1125px;
+    height: 600px;
     max-width: 100%;
-    min-height: 480px;
+    min-height: 360px;
+    /* Trigger the animation on load */
+    animation: containerEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .container p {
-    font-size: 30px;
-    line-height: 40px;
-    letter-spacing: 0.3px;
-    margin: 20px 0;
-    color: #b0c4de;
+    font-size: 22.5px;
+    line-height: 30px;
+    letter-spacing: 0.2px;
+    margin: 15px 0;
+    color: #ffffff;
 }
 
 .container span {
-    font-size: 30px;
+    font-size: 18.75px;
     color: #8fa3c0;
+    text-align: center;
+    padding-bottom: 22.5px;
+
 }
 
-/* Forgot Password Link */
-.container a {
-    color: #4db8e8;
-    font-size: 23px;
-    text-decoration: none;
-    margin: 15px 0 10px;
-    transition: color 0.3s ease;
-}
-.container a:hover {
-    color: #7ec9ed;
-}
+
 
 .container h1 {
     color: #ffffff;
+    padding-bottom: 22.5px;
 }
 
 /* The Primary Orange submission buttons inside the forms */
 .container button {
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     color: #fff;
-    font-size: 21px;
-    padding: 10px 45px;
+    font-size: 15.75px;
+    padding: 7.5px 33.8px;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
-    margin-top: 20px;
+    margin-top: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 3px 11.25px rgba(255, 107, 53, 0.3);
 }
 
 .container button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+    transform: translateY(-1.5px);
+    box-shadow: 0 4.5px 15px rgba(255, 107, 53, 0.5);
 }
 
 /* The completely transparent hollow-button used strictly inside the Sliding Graphic Panel for toggling */
 .container button.hidden {
     background: transparent;
-    border: 2px solid #4db8e8;
-    box-shadow: 0 0 20px rgba(77, 184, 232, 0.3);
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 .container button.hidden:hover {
-    background: rgba(77, 184, 232, 0.1);
-    box-shadow: 0 0 30px rgba(77, 184, 232, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 22.5px rgba(255, 255, 255, 0.4);
 }
 
 /* The raw form blocks themselves */
@@ -104,17 +112,17 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
+    padding: 0 30px;
     height: 100%;
 }
 
 .container input {
-    background-color: #0f1620;
+    background-color: rgba(15, 22, 32, 0.8);
     border: 1px solid rgba(77, 184, 232, 0.3);
-    margin: 15px;
-    padding: 10px 15px;
-    font-size: 20px;
-    border-radius: 8px;
+    margin: 9px 0;
+    padding: 10.5px 13.5px;
+    font-size: 13.5px;
+    border-radius: 7.5px;
     width: 100%;
     outline: none;
     transition: all 0.3s ease;
@@ -126,39 +134,12 @@
 }
 
 .container input:focus {
-    border-color: #4db8e8;
-    box-shadow: 0 0 15px rgba(77, 184, 232, 0.3);
-    background-color: #151d2b;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 11.25px rgba(255, 107, 53, 0.3);
+    background-color: rgba(26, 37, 64, 0.8);
 }
 
-/* ── Birth Date Native Calendar Overrides ── */
-.container input[type="date"] {
-    position: relative;
-    color: #ffffff;
-    cursor: pointer;
-}
-.container input[type="date"]:not(:focus):invalid {
-    color: #6a7a94;
-}
-.container input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    /* Force recolor the little native Calendar icon using CSS filters */
-    filter: invert(0.6) sepia(1) saturate(3) hue-rotate(180deg);
-    transition: all 0.3s ease;
-    padding: 5px;
-    border-radius: 4px;
-}
-.container input[type="date"]::-webkit-calendar-picker-indicator:hover {
-    filter: invert(0.7) sepia(1) saturate(4) hue-rotate(180deg);
-    background: rgba(77, 184, 232, 0.1);
-}
-.container input[type="date"]::-moz-calendar-picker-indicator {
-    cursor: pointer;
-    filter: invert(0.6) sepia(1) saturate(3) hue-rotate(180deg);
-}
-.container input[type="date"]:focus::-webkit-calendar-picker-indicator {
-    filter: invert(0.8) sepia(1) saturate(5) hue-rotate(180deg);
-}
+
 
 /* ── The Two Static Forms (Login on Left, Signup on Right) ── */
 .form-container {
@@ -204,27 +185,7 @@
     }
 }
 
-/* ── Social Login Buttons ── */
-.social-icons {
-    margin: 20px 0;
-}
-.social-icons a {
-    border: 1px solid rgba(77, 184, 232, 0.4);
-    border-radius: 20%; /* Makes the icons squircle shaped */
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 3px;
-    width: 40px;
-    height: 40px;
-    transition: all 0.3s ease;
-    color: #4db8e8;
-}
-.social-icons a:hover {
-    border-color: #4db8e8;
-    box-shadow: 0 0 15px rgba(77, 184, 232, 0.5);
-    background: rgba(77, 184, 232, 0.1);
-}
+
 
 /* ── The Sliding Graphical Door Panel ── */
 /* This is the massive blue gradient graphic that slides left/right */
@@ -236,16 +197,16 @@
     height: 100%;
     overflow: hidden;
     transition: all 0.6s ease-in-out;
-    border-radius: 150px 0 0 100px;
+    border-radius: 112.5px 0 0 75px;
     z-index: 1000;
 }
 .container.active .toggle-container {
     transform: translateX(-100%);
-    border-radius: 0 150px 100px 0;
+    border-radius: 0 112.5px 75px 0;
 }
 
 .toggle {
-    background: linear-gradient(135deg, #1e3a52 0%, #2d5a7b 50%, #3a6d8f 100%);
+    background: linear-gradient(135deg, #1e5a7d 0%, #2173BC 100%);
     height: 100%;
     color: #fff;
     position: relative;
@@ -253,7 +214,7 @@
     width: 200%;
     transform: translateX(0);
     transition: all 0.6s ease-in-out;
-    box-shadow: inset 0 0 60px rgba(77, 184, 232, 0.2);
+    box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.3);
 }
 
 .container.active .toggle {
@@ -268,15 +229,19 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 30px;
+    padding: 0 22.5px;
     text-align: center;
-    top: 0;
+    top: -33.7px;
     transform: translateX(0);
     transition: all 0.6s ease-in-out;
 }
 
 .toggle-panel h1 {
-    text-shadow: 0 0 20px rgba(77, 184, 232, 0.5);
+    text-shadow: 0 1.5px 7.5px rgba(0, 0, 0, 0.3);
+    margin-bottom: -30px;
+}
+.toggle-panel p {
+    margin-bottom: -7.5px;
 }
 
 .toggle-left {
@@ -298,22 +263,34 @@
 .password-field {
   position: relative;
   width: 100%;
-  right: 17px
 }
 
 .password-field input {
   width: 100%;
-  padding-right: 2.5rem; /* space for the eye */
 }
 
+
+
 /* The tiny button sitting inside the form input hiding the 👁️ emoji */
-.password-field button {
-  position: absolute;
-  right: 0.2rem;
-  top: 12%;
-  background: none;
-  border: none;
+.eye-icon {
+  position: absolute;   
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
-  font-size: 1.2rem; /* make the emoji/icon bigger */
-  padding: 0;
+  font-size: 0.9rem;
+}
+
+.back-icon{
+    cursor: pointer;
+    font-size: 1.1rem;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+}
+
+.toggle-panel .landing-logo {
+    width: 65%;
+    margin-bottom: -60px;
 }

@@ -54,14 +54,14 @@ a {
 
 /* Custom Browser Scrollbar (Overrides the default ugly scrollbar globally) */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 ::-webkit-scrollbar-track {
     background: rgba(15, 22, 32, 0.8);
 }
 ::-webkit-scrollbar-thumb {
     background: rgba(77, 184, 232, 0.4);
-    border-radius: 4px;
+    border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(77, 184, 232, 0.8);

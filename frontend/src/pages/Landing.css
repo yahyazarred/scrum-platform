@@ -36,35 +36,35 @@
 .glow-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(60px);
     opacity: 0.4;
     animation: float 15s infinite ease-in-out;
 }
 
 /* Large Blue Orb floating top left */
 .orb-1 {
-    width: 600px;
-    height: 600px;
+    width: 450px;
+    height: 450px;
     background: radial-gradient(circle, rgba(77, 184, 232, 0.6) 0%, transparent 70%);
-    top: -200px;
-    left: -200px;
+    top: -150px;
+    left: -150px;
     animation-delay: 0s;
 }
 
 /* Medium Orange Orb floating bottom right */
 .orb-2 {
-    width: 500px;
-    height: 500px;
+    width: 375px;
+    height: 375px;
     background: radial-gradient(circle, rgba(255, 107, 53, 0.5) 0%, transparent 70%);
-    bottom: -150px;
-    right: -150px;
+    bottom: -112.49px;
+    right: -112.49px;
     animation-delay: 5s;
 }
 
 /* Inner purple-ish Orb drifting near center */
 .orb-3 {
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
     background: radial-gradient(circle, rgba(45, 27, 61, 0.8) 0%, transparent 70%);
     top: 50%;
     left: 50%;
@@ -78,10 +78,10 @@
         transform: translate(0, 0) scale(1);
     }
     33% {
-        transform: translate(100px, -100px) scale(1.2);
+        transform: translate(75px, -75px) scale(1.2);
     }
     66% {
-        transform: translate(-80px, 80px) scale(0.9);
+        transform: translate(-60px, 60px) scale(0.9);
     }
 }
 
@@ -91,59 +91,48 @@
     position: relative;
     z-index: 10;
     text-align: center;
-    padding: 2rem;
+    padding: 1.51rem;
     animation: fadeIn 1.2s ease-out;
+    bottom: 75px;
+    left: 337.51px;
 }
 
 /* The massive "Transform Your Agile" text */
 .main-title {
-    font-size: 7rem;
+    font-size: 3.39rem;
     font-weight: 800;
     color: #ffffff;
     margin-bottom: 1rem;
     line-height: 1.1;
-    letter-spacing: -2px;
-    text-shadow: 0 0 40px rgba(77, 184, 232, 0.3);
+    letter-spacing: -1.49px;
+    text-shadow: 0 0 30px rgba(77, 184, 232, 0.3);
 }
 
 /* The gradient colored word "Workflow." */
-.highlight {
-    background: linear-gradient(135deg, #4db8e8 0%, #ff6b35 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.highlight2{
+    color: var(--primary-blue);
     background-clip: text;
     position: relative;
     display: inline-block;
 }
 
-/* The colored underline below "Workflow." */
-.highlight::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #4db8e8 0%, #ff6b35 100%);
-    border-radius: 2px;
-    box-shadow: 0 0 20px rgba(77, 184, 232, 0.6);
-}
+
 
 /* The subtitle under the main header */
 .tagline {
-    font-size: 1.8rem;
+    font-size: 1.13rem;
     color: #b0c4de;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
     font-weight: 300;
-    letter-spacing: 2px;
+    letter-spacing: 1.51px;
 }
 
 /* ── Feature Highlights (10x Sprints, Zero Chaos) ── */
 .feature-highlights {
     display: flex;
     justify-content: center;
-    gap: 4rem;
-    margin-bottom: 4rem;
+    gap: 3rem;
+    margin-bottom: 3rem;
     flex-wrap: wrap;
 }
 
@@ -152,23 +141,23 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem 2rem;
+    padding: 1rem 1.51rem;
     background: linear-gradient(135deg, rgba(26, 37, 64, 0.6) 0%, rgba(30, 42, 69, 0.6) 100%);
-    border-radius: 50px;
+    border-radius: 37.51px;
     border: 1px solid rgba(77, 184, 232, 0.3);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(7.51px);
     transition: all 0.3s ease;
 }
 
 .highlight-item:hover {
     border-color: #4db8e8;
-    box-shadow: 0 0 30px rgba(77, 184, 232, 0.4);
-    transform: translateY(-5px);
+    box-shadow: 0 0 22.51px rgba(77, 184, 232, 0.4);
+    transform: translateY(-3.75px);
 }
 
 /* The large numerical number next to the feature text */
 .highlight-number {
-    font-size: 1.5rem;
+    font-size: 1.13rem;
     font-weight: 700;
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     -webkit-background-clip: text;
@@ -177,7 +166,7 @@
 }
 
 .highlight-text {
-    font-size: 1.1rem;
+    font-size: 0.83rem;
     color: #ffffff;
     font-weight: 500;
 }
@@ -185,19 +174,19 @@
 /* ── "START YOUR JOURNEY" Primary Button ── */
 .cta-button {
     position: relative;
-    padding: 1.5rem 4rem;
-    font-size: 1.3rem;
+    padding: 1.13rem 3rem;
+    font-size: 1rem;
     font-weight: 700;
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     color: #fff;
     border: none;
-    border-radius: 50px;
+    border-radius: 37.51px;
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1.51px;
     overflow: hidden;
     transition: all 0.4s ease;
-    box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+    box-shadow: 0 6px 22.51px rgba(255, 107, 53, 0.4);
 }
 
 /* The white 'shine' effect sliding across the button */
@@ -217,24 +206,11 @@
 }
 
 .cta-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(255, 107, 53, 0.6);
+    transform: translateY(-3.75px);
+    box-shadow: 0 9px 30px rgba(255, 107, 53, 0.6);
 }
 
-/* Invisible background acting as a glowing backlight on hover */
-.button-glow {
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(135deg, #4db8e8, #ff6b35);
-    border-radius: 50px;
-    z-index: -1;
-    opacity: 0;
-    filter: blur(10px);
-    transition: opacity 0.4s ease;
-}
+
 
 .cta-button:hover .button-glow {
     opacity: 0.8;
@@ -244,7 +220,7 @@
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(22.51px);
     }
     to {
         opacity: 1;
@@ -252,41 +228,34 @@
     }
 }
 
-/* ── Mobile Layout Overrides ── */
-@media (max-width: 768px) {
-    .main-title {
-        font-size: 3.5rem;
-    }
-    .tagline {
-        font-size: 1.3rem;
-    }
-    .feature-highlights {
-        gap: 1.5rem;
-        flex-direction: column;
-        align-items: center;
-    }
-    .cta-button {
-        padding: 1.2rem 3rem;
-        font-size: 1.1rem;
-    }
-    .orb-1, .orb-2, .orb-3 {
-        width: 300px;
-        height: 300px;
-    }
-}
-@media (max-width: 480px) {
-    .main-title {
-        font-size: 2.5rem;
-    }
-}
 
 /* Scrumble Image Logo at very top */
 .logo-container {
   display: flex;
   justify-content: center;
-  margin-bottom: -140px;
+  margin-bottom: -105px;
 }
 
 .landing-logo {
-  width: 750px;   /* adjust size as you like */
+  width: 562.51px;   /* adjust size as you like */
+}
+
+/* ── Bottom Decorative Shape ── */
+.landing-bottom-shape {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── Bottom Decorative Shape ── */
+.landing-graphic {
+  position: absolute;
+  bottom: 0;
+  left: -75px;
+  width: 70%;
+  z-index: 5;
+  pointer-events: none;
 }

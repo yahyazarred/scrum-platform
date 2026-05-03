@@ -5,12 +5,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px;
-    height: 70px;
+    padding: 0 30px;
+    height: 52.51px;
     width: 100%;
     background: var(--bg-dark);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
     border-bottom: 1px solid var(--primary-blue-light);
     position: fixed;   
     top: 0;
@@ -22,32 +22,32 @@
 .logoContainer {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 9px;
 }
 
 /* The invisible box containing the logo */
 .logoPlaceholder {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;  
-    margin-top: 13px;
+    margin-top: 9.75px;
 }
 
 /* image file for the Logo */
 .logoPlaceholder img {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
 }
 
 /* The text "Scrumble" next to the logo in the header */
 .logoText {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 700;
     color: #ffffff;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.39px;
 }
 
 /* The "ble" in Scrumble colored blue */
@@ -62,5 +62,5 @@
 .rightSide {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 11.25px;
 }

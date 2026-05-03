@@ -14,7 +14,8 @@ import {
 } from '@dnd-kit/sortable';
 import { 
   getEpics, createEpic, 
-  getUserStories, createUserStory, updateUserStory, deleteUserStory, reorderStories 
+  getUserStories, createUserStory, updateUserStory, deleteUserStory, reorderStories,
+  estimateStoryPoints
 } from "../../services/backlog.api";
 import type { EpicData, UserStoryData } from "../../services/backlog.api";
 import { useAuth } from "../../context/AuthContext";
@@ -113,11 +114,23 @@ const ProductBacklog: React.FC<ProductBacklogProps> = ({ role }) => {
     }
   };
 
+  const handleEstimateStory = async (storyId: string, points: number | null) => {
+    if (!token || !projectId) return;
+    try {
+      const updatedStory = await estimateStoryPoints(token, projectId, storyId, points);
+      setStories(prev => prev.map(s => s._id === storyId ? { ...s, storyPoints: updatedStory.storyPoints } : s));
+      toast.success("Story estimated!");
+    } catch (err: any) {
+      console.error("Failed to estimate story:", err);
+      toast.error(err.message || "Failed to estimate story");
+    }
+  };
+
 // ==== sensors object ====
   const sensors = useSensors(  
     useSensor(PointerSensor, { // "PointerSensor" listens for mouse clicks and touch interactions
       activationConstraint: {
-        distance: 5, // mouse needs to be moves at least 5 pixels for dragging to start (prevents accidental drags)
+        distance: 5, // mouse needs to be moved at least 5 pixels for dragging to start (prevents accidental drags)
       },
     })
   );
@@ -202,6 +215,7 @@ const ProductBacklog: React.FC<ProductBacklogProps> = ({ role }) => {
                   role={role}
                   onUpdateStory={handleUpdateStory}
                   onDeleteStory={handleDeleteStory}
+                  onEstimateStory={handleEstimateStory}
                 />
               ))}
             </SortableContext>

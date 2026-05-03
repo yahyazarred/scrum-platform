@@ -18,7 +18,7 @@ const signToken = (user) =>
 // ================= signup ================= //
 exports.signup = async (req, res) => {
   try {
-    const { firstName, lastName, dateOfBirth, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -26,7 +26,7 @@ exports.signup = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({ firstName, lastName, dateOfBirth, email, password: hashedPassword });
+    await User.create({ firstName, lastName, email, password: hashedPassword });
 
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);

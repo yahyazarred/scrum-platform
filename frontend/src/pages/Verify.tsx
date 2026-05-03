@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { verifyEmail } from "../services/auth.api";
 import { useAuth } from "../context/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import './Verify.css';
 
 interface LocationState { email: string; }
@@ -55,15 +55,14 @@ export default function Verify() {
         </p>
         <form onSubmit={handleSubmit} className="verify-form">
           <div className="input-group">
-            <FontAwesomeIcon icon={faKey} className="input-icon" />
+
             <input type="text" placeholder="Enter Verification Code" value={code}
               onChange={(e) => setCode(e.target.value)} required className="verify-input" />
           </div>
           <button type="submit" className="verify-button">Verify Email</button>
-          <div className="verify-footer">
-            <p>Didn't receive the code?</p>
-            <a href="#" className="resend-link">Resend Code</a>
-          </div>
+        <p className="verify-description">
+          this code expires in 5 mintues
+        </p>
         </form>
       </div>
     </div>

@@ -1,10 +1,3 @@
-// ============================================================
-// What is this file?
-//   The Project Details panel. It fetches and displays the
-//   project's core metrics, description, and dynamic progress bar.
-//   It conditionally renders Edit/Delete modals if the user
-//   is a Product Owner.
-// ============================================================
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -16,7 +9,6 @@ import type { UserStoryData } from '../../services/backlog.api';
 import { Button } from '../ui/Button/Button';
 import './ProjectDetails.css';
 
-// The props injected by the parent ProjectDashboard component
 interface ProjectDetailsProps {
   projectId: string;
   role: string | null;
@@ -27,58 +19,34 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
   const navigate = useNavigate();
   const { token } = useAuth();
   
-// ==========================================
-  // COMPONENT STATE
-  // ==========================================
-  
-  // --- Core Data State ---
-  // project: Holds the specific metadata (name, description, duration) of the active project.
-  // Initially populated via location state to bypass a loading screen if coming from the dashboard,
-  // but updated via a network fetch if it's missing (e.g. from a page refresh).
   const [project, setProject] = useState<ProjectData | null>(initialProject);
   
-  // stories: An array containing every UserStory associated with the current project.
   const [stories, setStories] = useState<UserStoryData[]>([]);
 
-  // members: Used to display the exact team composition directly within this tab.
   const [members, setMembers] = useState<ProjectMemberData[]>([]);
   
-  // loading: UI flag that protects the page from rendering undefined JSX elements.
   const [loading, setLoading] = useState<boolean>(!initialProject);
   
-  // --- Modals State ---
-  // Simple boolean toggles that dictate whether the "Edit" or "Delete" modal overlay is active.
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [kickTarget, setKickTarget] = useState<{ id: string; name: string } | null>(null);
   
-  // --- Edit Form State ---
-  // These discrete string states track the text inputs inside the Edit Modal form.
-  // They are strictly synchronized to the current `project` object whenever the modal opens.
   const [editName, setEditName] = useState("");
   const [editDesc, setEditDesc] = useState("");
-  const [editSprintDuration, setEditSprintDuration] = useState("2 Weeks");
+  const [editSprintDuration, setEditSprintDuration] = useState<number>(2);
   const [editProjectGoal, setEditProjectGoal] = useState("");
   const [editGithubLink, setEditGithubLink] = useState("");
 
-  // ==========================================
-  // USE-EFFECT HOOKS
-  // ==========================================
-  
-  // Hook 1: Master Data Fetch
-  // Fires strictly upon mount or if the `projectId` or `token` alters.
   useEffect(() => {
     if (!token || !projectId) return;
 
     const fetchDetails = async () => {
       try {
-        // If we don't have cached data from the router, fetch it manually
         if (!project) {
           const p = await getProjectById(token, projectId);
           setProject(p);
         }
-        // Always fetch stories so we have an accurate progress bar
         const [s, m] = await Promise.all([
            getUserStories(token, projectId),
            getProjectMembers(token, projectId)
@@ -95,9 +63,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
     fetchDetails();
   }, [token, projectId, project]);
 
-  // Hook 2: Modal Data Synchronization
-  // Listens for the `isEditModalOpen` flag. Whenever the PO clicks "Edit",
-  // this effect immediately maps the existing Project data over into the temporary Form States.
   useEffect(() => {
     if (isEditModalOpen && project) {
       setEditName(project.name);
@@ -108,21 +73,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
     }
   }, [isEditModalOpen, project]);
 
-  // --- Rendering Gates ---
-  // Ensures the JSX down below doesn't crash from accessing null objects
   if (loading) return <div className="placeholder-content">Loading...</div>;
   if (!project) return <div className="placeholder-content">Project not found.</div>;
 
-  // ==========================================
-  // Progress Bar Math
-  // Calculated by summing the number of stories marked "Done"
-  // vs the total number of stories.
-  // ==========================================
   const totalStories = stories.length;
   const doneStories = stories.filter(s => s.status === "Done").length;
   const completionPercentage = totalStories === 0 ? 0 : Math.round((doneStories / totalStories) * 100);
-
-  // --- Handlers ---
   
   const roleOrder = { product_owner: 0, scrum_master: 1, developer: 2 };
   const sortedMembers = [...members].sort((a, b) => roleOrder[a.role] - roleOrder[b.role]);
@@ -154,7 +110,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
       await deleteProject(token, projectId);
       setIsDeleteModalOpen(false);
       toast.success("Project deleted successfully");
-      navigate('/dashboard'); // Eject user back to safety
+      navigate('/dashboard'); // Eject user back to dashboard
     } catch(err: any) {
       toast.error(err.message || "Failed to delete project");
     }
@@ -255,7 +211,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
           <div className="details-card meta-card">
             <div className="meta-item">
               <span className="meta-label">Sprint Duration</span>
-              <span className="meta-value">{project.sprintDuration}</span>
+              <span className="meta-value">{project.sprintDuration} Week{project.sprintDuration !== 1 ? 's': ''}</span>
             </div>
             {project.githubLink && (
               <div className="meta-item">
@@ -336,14 +292,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ projectId, role, initia
                 <div className="pd-input-group">
                   <label>Sprint Duration</label>
                   <div className="pd-sprint-pills">
-                    {['1 Week', '2 Weeks', '3 Weeks', '4 Weeks'].map((duration) => (
+                    {[1, 2, 3, 4].map((duration) => (
                       <button
                         type="button"
                         key={duration}
                         className={`pd-sprint-pill ${editSprintDuration === duration ? 'active' : ''}`}
                         onClick={() => setEditSprintDuration(duration)}
                       >
-                        {duration}
+                        {duration} Week{duration !== 1 ? 's' : ''}
                       </button>
                     ))}
                   </div>

@@ -15,21 +15,21 @@
 .back-to-dashboard-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: rgba(77, 184, 232, 0.08);
     border: 1px solid rgba(77, 184, 232, 0.3);
-    border-radius: 30px;
-    padding: 8px 20px;
+    border-radius: 22.51px;
+    padding: 6px 15px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #b0c4de;
-    font-size: 14px;
+    font-size: 10.51px;
     font-weight: 500;
 }
 .back-to-dashboard-btn:hover {
     background: rgba(77, 184, 232, 0.18);
     border-color: #4db8e8;
-    box-shadow: 0 0 20px rgba(77, 184, 232, 0.25);
+    box-shadow: 0 0 15px rgba(77, 184, 232, 0.25);
     color: #ffffff;
 }
 
@@ -41,29 +41,29 @@
     display: flex;
     flex: 1;
     width: 100%;
-    margin-top: 70px;
-    height: calc(100vh - 70px); 
+    margin-top: 52.51px;
+    height: calc(100vh - 52.51px); 
     overflow: hidden; 
 }
 
 /* The sidebar */
 .project-sidebar {
-    width: 260px;
+    width: 195px;
     background-color: var(--bg-dark);
     border-right: 1px solid var(--primary-blue-light);
     display: flex;
     flex-direction: column;
-    padding: 24px 0;
+    padding: 18px 0;
 }
 
 /* The top box of the sidebar housing the Title and Job Role */
 .sidebar-header {
-    padding: 0 20px 24px 20px;
+    padding: 0 15px 18px 15px;
     border-bottom: 1px solid var(--primary-blue-light);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 9px;
 }
 
 /* The pill showing if you are Product Owner, Scrum Master, or Developer */
@@ -71,12 +71,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 9px;
+    font-size: 8.25px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.39px;
     width: fit-content;
 }
 
@@ -100,7 +100,7 @@
 /* Project Name at the top of the sidebar */
 .project-title {
     color: #ffffff;
-    font-size: 1.25rem;
+    font-size: 0.95rem;
     font-weight: 700;
     line-height: 1.4;
     word-break: break-word;
@@ -110,7 +110,7 @@
 .project-main-content {
     flex: 1;
     background-color: rgba(15, 22, 32, 0.4);
-    padding: 40px;
+    padding: 30px;
     overflow-y: auto;
 }
 
@@ -120,19 +120,19 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    min-height: 400px;
+    min-height: 300px;
     color: var(--text-muted);
-    font-size: 1.1rem;
-    border: 2px dashed rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    font-size: 0.83rem;
+    border: 1.51px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 9px;
 }
 
 /* The vertical list of clickable tabs */
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    padding: 0 10px;
-    gap: 5px;
+    padding: 0 7.51px;
+    gap: 3.75px;
 }
 
 /* Unselected tabs */
@@ -141,10 +141,10 @@
     border: none;
     color: var(--text-muted, #8b9bb4);
     text-align: left;
-    padding: 12px 20px;
-    border-radius: 8px;
+    padding: 9px 15px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 13.51px;
     font-weight: 500;
     transition: all 0.2s ease;
 }
@@ -157,7 +157,7 @@
 .sidebar-tab.active {
     background: rgba(77, 184, 232, 0.15);
     color: #ffffff;
-    border-left: 3px solid var(--primary-blue);
+    border-left: 2.25px solid var(--primary-blue);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }

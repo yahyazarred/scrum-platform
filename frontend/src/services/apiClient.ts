@@ -1,11 +1,3 @@
-// ============================================================
-// What is this file?
-//   Core HTTP Client configuration.
-//   It sets up the base URL and provides the generic 'request'
-//   function that automatically attaches your authentication
-//   token to backend requests.
-// ============================================================
-
 const API_URL = "http://localhost:5000/api";
 
 export async function request<T>(

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { getActiveSprint, endSprint } from "../../services/sprint.api";
-import type { SprintData } from "../../services/sprint.api";
+import { getActiveSprint, endSprint, getActiveSprintBurndown } from "../../services/sprint.api";
+import type { SprintData, BurndownDataPoint } from "../../services/sprint.api";
 import { getUserStories } from "../../services/backlog.api";
 import type { UserStoryData } from "../../services/backlog.api";
 import { toast } from "react-toastify";
 import { Button } from "../ui/Button/Button";
 import StartSprintDrawer from "./StartSprintDrawer";
 import KanbanBoard from "./KanbanBoard";
+import { BurndownChart } from "../Analytics/BurndownChart";
 import "./ActiveSprint.css";
 
 interface ActiveSprintProps {
@@ -23,7 +24,9 @@ const ActiveSprint: React.FC<ActiveSprintProps> = ({ role }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isEndSprintModalOpen, setIsEndSprintModalOpen] = useState(false);
+  const [isBurndownModalOpen, setIsBurndownModalOpen] = useState(false);
   const [stories, setStories] = useState<UserStoryData[]>([]);
+  const [burndownData, setBurndownData] = useState<BurndownDataPoint[]>([]);
 
   const fetchSprint = async () => {
     if (!token || !projectId) return;
@@ -34,8 +37,16 @@ const ActiveSprint: React.FC<ActiveSprintProps> = ({ role }) => {
       if (data) {
         const allStories = await getUserStories(token, projectId);
         setStories(allStories.filter(s => s.sprint === data._id));
+
+        try {
+          const bData = await getActiveSprintBurndown(token, projectId);
+          setBurndownData(bData);
+        } catch (err) {
+          console.error("Failed to load active burndown", err);
+        }
       } else {
         setStories([]);
+        setBurndownData([]);
       }
     } catch (err) {
       console.error("Failed to fetch active sprint", err);
@@ -60,7 +71,8 @@ const ActiveSprint: React.FC<ActiveSprintProps> = ({ role }) => {
       toast.success("Sprint ended successfully");
       setIsEndSprintModalOpen(false);
       setSprint(null);
-      setStories([]); // Instantly clear stories to prevent bleeding into next sprint UI
+      setStories([]);
+      setBurndownData([]); // Instantly clear metrics to prevent bleeding into next sprint UI
     } catch (err: any) {
       console.error("Failed to end sprint:", err);
       toast.error(err.message || "Failed to end sprint");
@@ -117,7 +129,8 @@ const ActiveSprint: React.FC<ActiveSprintProps> = ({ role }) => {
             </div>
 
             <div className="sprint-dates" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span className="date-badge">Ends: {new Date(sprint.endDate).toLocaleDateString()}</span>
+              
+              <Button type="button" variant="secondary" onClick={() => setIsBurndownModalOpen(true)}>📈 Burndown</Button>
               {role === "scrum_master" && (
                 <button className="btn-danger" onClick={() => setIsEndSprintModalOpen(true)}>End Sprint</button>
               )}
@@ -135,6 +148,22 @@ const ActiveSprint: React.FC<ActiveSprintProps> = ({ role }) => {
                   <Button type="button" variant="ghost" onClick={() => setIsEndSprintModalOpen(false)}>Cancel</Button>
                   <button className="btn-danger" onClick={handleEndSprint}>Yes, End Sprint</button>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {isBurndownModalOpen && (
+            <div className="pd-modal-overlay">
+              <div className="pd-modal-content burndown-modal-content">
+                <div className="burndown-modal-header">
+                  <h3>Active Sprint Burndown</h3>
+                  <button className="burndown-modal-close" onClick={() => setIsBurndownModalOpen(false)}>✕</button>
+                </div>
+                {burndownData.length > 0 ? (
+                  <BurndownChart data={burndownData} title="Live Trajectory" />
+                ) : (
+                  <p className="burndown-loading-msg">Gathering data...</p>
+                )}
               </div>
             </div>
           )}

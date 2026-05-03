@@ -5,22 +5,29 @@ import { GripVertical, Pencil, Trash2 } from "lucide-react";
 import type { UserStoryData, EpicData } from "../../services/backlog.api";
 import "./Backlog.css";
 
-// Defines exactly what data must be passed into this component from the parent (ProductBacklog)
 interface StoryCardProps {
-  story: UserStoryData; // The actual data for this specific story (title, desc,)
-  index: number;        // The physical row number of this card in the list
-  epics: EpicData[];    // The list of all possible epics (used for the dropdown when editing)
-  role: string | null;  // User role for access control
+  story: UserStoryData; 
+  index: number;        
+  epics: EpicData[];    
+  role: string | null;  
    
-  // We call these when we want to tell the parent "Hey, I changed my data!"
   onUpdateStory: (storyId: string, updatedData: Partial<UserStoryData> & { epicId?: string }) => void;
   onDeleteStory: (storyId: string) => void;
+  onEstimateStory: (storyId: string, points: number | null) => void;
 }
 
-const StoryCard: React.FC<StoryCardProps> = ({ story, epics, role, onUpdateStory, onDeleteStory }) => {
+export const getStoryPointClass = (points: number | null | undefined) => {
+  if (!points) return "pts-unestimated";
+  if (points <= 2) return "pts-green";
+  if (points <= 5) return "pts-yellow";
+  if (points <= 8) return "pts-orange";
+  return "pts-red";
+};
+const StoryCard: React.FC<StoryCardProps> = ({ story, epics, role, onUpdateStory, onDeleteStory, onEstimateStory }) => {
   // These variables only exist inside this specific card to track if its modals are open
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEstimator, setShowEstimator] = useState(false);
   
   // Temporary state to hold the user's typed changes BEFORE they hit "Save"
   const [editTitle, setEditTitle] = useState(story.title);
@@ -102,6 +109,51 @@ const StoryCard: React.FC<StoryCardProps> = ({ story, epics, role, onUpdateStory
                 </span>
               )}
               <span className="priority-badge">#{story.priority}</span>
+
+              <div className="story-points-container">
+                {role === "developer" ? (
+                  showEstimator ? (
+                    <div className="points-glass-menu">
+                      <button 
+                        className="point-btn close-btn" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowEstimator(false);
+                        }}
+                      >
+                        ✕
+                      </button>
+                      {[null, 1, 2, 3, 5, 8, 13, 21].map(pt => (
+                        <button 
+                          key={pt || 'unestimated'} 
+                          className={`point-btn ${story.storyPoints === pt ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEstimateStory(story._id, pt);
+                            setShowEstimator(false);
+                          }}
+                        >
+                          {pt || '-'}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <button 
+                      className={`points-badge developer-btn ${getStoryPointClass(story.storyPoints)}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowEstimator(!showEstimator);
+                      }}
+                    >
+                      {story.storyPoints ? `${story.storyPoints} pts` : 'Estimate'}
+                    </button>
+                  )
+                ) : (
+                  <span className={`points-badge ${getStoryPointClass(story.storyPoints)}`}>
+                    {story.storyPoints ? `${story.storyPoints} pts` : 'Unestimated'}
+                  </span>
+                )}
+              </div>
 
               <div className="story-status-display">
                 <span className={`status-readonly-badge status-readonly-${story.status.replace(" ", "").toLowerCase()}`}>

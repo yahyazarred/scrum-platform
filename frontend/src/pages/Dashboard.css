@@ -16,46 +16,46 @@
 .profile-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 7.51px;
     background: rgba(77, 184, 232, 0.08);
     border: 1px solid rgba(77, 184, 232, 0.3);
-    border-radius: 50px;
-    padding: 8px 20px 8px 10px;
+    border-radius: 37.51px;
+    padding: 6px 15px 6px 7.51px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
     color: #b0c4de;
-    font-size: 14px;
+    font-size: 10.51px;
     font-weight: 500;
 }
 
 .profile-btn:hover {
     background: rgba(77, 184, 232, 0.18);
     border-color: #4db8e8;
-    box-shadow: 0 0 20px rgba(77, 184, 232, 0.25);
+    box-shadow: 0 0 15px rgba(77, 184, 232, 0.25);
     color: #ffffff;
 }
 
 /* The glowing orange circle with your initials inside the profile button */
 .profile-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50px;
+    width: 25.51px;
+    height: 25.51px;
+    border-radius: 37.51px;
     background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 10.51px;
     font-weight: 700;
     color: #fff;
     flex-shrink: 0;
-    box-shadow: 0 0 10px rgba(255, 107, 53, 0.4);
+    box-shadow: 0 0 7.51px rgba(255, 107, 53, 0.4);
 }
 
 .dashboard-header-right {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 11.25px;
 }
 
 /* The red warning pill specifically showing "Unverified Account" in the header */
@@ -63,20 +63,20 @@
     background: rgba(255, 107, 53, 0.15);
     border: 1px solid rgba(255, 107, 53, 0.4);
     color: #ff6b35;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 13px;
+    padding: 4.51px 10.51px;
+    border-radius: 15px;
+    font-size: 9.75px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4.51px;
 }
 
 .unverified-badge:hover {
     background: rgba(255, 107, 53, 0.25);
-    box-shadow: 0 0 10px rgba(255, 107, 53, 0.2);
+    box-shadow: 0 0 7.51px rgba(255, 107, 53, 0.2);
 }
 
 /* ── Main content area ── */
@@ -87,18 +87,18 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 40px;
-    padding-top: 110px; /* ← 70px header + 40px original top padding */
+    padding: 30px;
+    padding-top: 82.51px; /* ← 52.51px header + 30px original top padding */
 }
 
 .dashboard-content {
     width: 100%;
     /* allow the content to stretch to the available screen space */
     max-width: none;
-    padding: 0 20px;
+    padding: 0 15px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 22.51px;
 }
 
 /* The dark grey banner sitting above the project grid housing the "Create" and "Join" buttons */
@@ -107,22 +107,22 @@
     justify-content: space-between;
     align-items: center;
     background: rgba(15, 22, 32, 0.6);
-    padding: 20px 30px;
-    border-radius: 16px;
+    padding: 15px 22.51px;
+    border-radius: 12px;
     border: 1px solid rgba(77, 184, 232, 0.15);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(7.51px);
 }
 
 .section-title {
     color: #fff;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 600;
 }
 
 .action-buttons {
     display: flex;
-    gap: 15px;
+    gap: 11.25px;
 }
 
 /* ── Projects Grid ── */
@@ -130,7 +130,7 @@
     display: grid;
     /* This makes the grid flexibly respond to the full width using 3 columns */
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 25px;
+    gap: 18.75px;
 }
 
 /* The dashed placeholder box shown when the user has exactly 0 projects */
@@ -138,10 +138,10 @@
     grid-column: 1 / -1;
     text-align: center;
     color: var(--text-muted);
-    font-size: 18px;
-    padding: 40px;
+    font-size: 13.51px;
+    padding: 30px;
     background: rgba(15, 22, 32, 0.5);
-    border-radius: 16px;
+    border-radius: 12px;
     border: 1px dashed rgba(255, 255, 255, 0.2);
 }
 
@@ -152,7 +152,7 @@
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(3.75px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -163,30 +163,30 @@
 .modal-content {
     background: #111824;
     border: 1px solid rgba(77, 184, 232, 0.3);
-    border-radius: 20px;
-    padding: 35px;
+    border-radius: 15px;
+    padding: 26.25px;
     width: 100%;
-    max-width: 550px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    max-width: 412.51px;
+    box-shadow: 0 11.25px 30px rgba(0,0,0,0.5);
     animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-content h3 {
     color: #fff;
-    font-size: 24px;
-    margin-bottom: 25px;
+    font-size: 18px;
+    margin-bottom: 18.75px;
     text-align: center;
 }
 
 .form-grid {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 19.51px;
 }
 
 .form-grid .full-width {
@@ -201,24 +201,24 @@
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 26px;
+    gap: 7.51px;
+    margin-bottom: 19.51px;
 }
 
 .input-group label {
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 10.51px;
     font-weight: 500;
 }
 
 .input-group input, .input-group textarea, .input-group select {
     width: 100%;
-    padding: 12px 16px;
+    padding: 9px 12px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    border-radius: 6px;
     color: #fff;
-    font-size: 15px;
+    font-size: 11.25px;
     transition: all 0.3s ease;
 }
 
@@ -240,7 +240,7 @@
 
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
     border-color: #f7931e;
-    box-shadow: 0 0 10px rgba(247, 147, 30, 0.3);
+    box-shadow: 0 0 7.51px rgba(247, 147, 30, 0.3);
     outline: none;
     background: rgba(0,0,0,0.5);
 }
@@ -254,7 +254,7 @@
 
 .input-with-icon .input-icon {
     position: absolute;
-    left: 16px;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-muted);
@@ -269,20 +269,20 @@
 
 .input-with-icon input,
 .input-with-icon textarea {
-    padding-left: 46px !important;
+    padding-left: 34.51px !important;
 }
 
 .input-with-icon .input-icon.textarea-icon {
-    top: 14px;
+    top: 10.51px;
     transform: none; /* override vertical centering for textareas */
 }
 
 /* ── UI Upgrades: Sprint Pills (Inside the modal layout) ── */
 .sprint-pills {
     display: flex;
-    gap: 12px;
+    gap: 9px;
     align-items: center;
-    height: 48px; /* Matches input height roughly */
+    height: 36px; /* Matches input height roughly */
 }
 
 /* The clickable options "1 Week", "2 Weeks", etc. */
@@ -294,9 +294,9 @@
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    border-radius: 6px;
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 9.75px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -311,33 +311,33 @@
     background: var(--primary-blue-light);
     border-color: var(--primary-blue);
     color: #fff;
-    box-shadow: 0 0 15px rgba(77, 184, 232, 0.3);
+    box-shadow: 0 0 11.25px rgba(77, 184, 232, 0.3);
 }
 
 .modal-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 15px;
-    margin-top: 30px;
+    gap: 11.25px;
+    margin-top: 22.51px;
 }
 
 .error-msg {
     color: #ff6b35;
     background: rgba(255, 107, 53, 0.1);
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-bottom: 20px;
+    padding: 7.51px;
+    border-radius: 6px;
+    font-size: 10.51px;
+    margin-bottom: 15px;
     text-align: center;
 }
 
 /* Responsive Grid Adjustments for smaller Windows */
-@media (max-width: 992px) {
+@media (max-width: 744px) {
     .projects-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-@media (max-width: 768px) {
+@media (max-width: 576px) {
     .projects-grid {
         grid-template-columns: 1fr;
     }
@@ -347,6 +347,6 @@
     .dashboard-actions {
         flex-direction: column;
         align-items: flex-start;
-        gap: 15px;
+        gap: 11.25px;
     }
 }
